@@ -53,12 +53,13 @@ func TestServiceImpl_Login(t *testing.T) {
 				buyerMock.EXPECT().GetEmail(gomock.Any(), gomock.Any()).Return(&entities.LoginEntity{Email: "user@mail.com", Password: "password123"}, nil)
 			},
 
-			wantToken: "Token Dummy",
+			wantToken: "password123",
 			wantErr:   false,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			tt.WantMock()
 			s := NewServiceImpl().
 				WithBuyer(buyerMock).
 				WithSeller(sellerMock).

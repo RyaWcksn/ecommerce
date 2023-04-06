@@ -25,27 +25,23 @@ func NewServiceImpl() *ServiceImpl {
 }
 
 func (s *ServiceImpl) WithBuyer(b repositories.IBuyer) *ServiceImpl {
-	return &ServiceImpl{
-		buyerImpl: b,
-	}
+	s.buyerImpl = b
+	return s
 }
 
 func (s *ServiceImpl) WithSeller(sl repositories.ISeller) *ServiceImpl {
-	return &ServiceImpl{
-		sellerImpl: sl,
-	}
+	s.sellerImpl = sl
+	return s
 }
 
 func (s *ServiceImpl) WithOrder(o repositories.IOrder) *ServiceImpl {
-	return &ServiceImpl{
-		orderImpl: o,
-	}
+	s.orderImpl = o
+	return s
 }
 
 func (s *ServiceImpl) WithProduct(p repositories.IProduct) *ServiceImpl {
-	return &ServiceImpl{
-		productImpl: p,
-	}
+	s.productImpl = p
+	return s
 }
 
 var _ IService = (*ServiceImpl)(nil)
