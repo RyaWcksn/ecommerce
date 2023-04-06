@@ -21,9 +21,10 @@ WORKDIR /app
 
 # Copy the executable from the build stage
 COPY --from=build /app .
+COPY --from=build /app/configs .
 
 # Expose port 8080 for the container
-EXPOSE 8090
+EXPOSE 9000
 
 # Run the executable
 CMD ["./app"]

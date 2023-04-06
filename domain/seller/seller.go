@@ -3,6 +3,7 @@ package seller
 import (
 	"database/sql"
 
+	"github.com/RyaWcksn/ecommerce/apis/v1/repositories"
 	"github.com/RyaWcksn/ecommerce/pkgs/logger"
 )
 
@@ -17,3 +18,5 @@ func NewSellerImpl(sql *sql.DB, log logger.ILogger) *SellerImpl {
 		log: log,
 	}
 }
+
+var _ repositories.ISeller = (*SellerImpl)(nil)
