@@ -5,6 +5,7 @@ import (
 
 	"github.com/RyaWcksn/ecommerce/configs"
 	"github.com/RyaWcksn/ecommerce/pkgs/logger"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 type Connection struct {
