@@ -12,6 +12,7 @@ import (
 	"github.com/RyaWcksn/ecommerce/configs"
 	"github.com/RyaWcksn/ecommerce/constants"
 	"github.com/RyaWcksn/ecommerce/domain/buyer"
+	"github.com/RyaWcksn/ecommerce/domain/seller"
 	"github.com/RyaWcksn/ecommerce/pkgs/database"
 	"github.com/RyaWcksn/ecommerce/pkgs/logger"
 	"github.com/RyaWcksn/ecommerce/server/middleware"
@@ -57,9 +58,13 @@ func (s *Server) Register() {
 	}
 
 	buyerImpl := buyer.NewBuyerImpl(db, s.log)
+	sellerImpl := seller.NewSellerImpl(db, s.log)
 
 	// Register service
-	s.service = services.NewServiceImpl().WithBuyer(buyerImpl).WithLog(s.log)
+	s.service = services.NewServiceImpl().
+		WithBuyer(buyerImpl).
+		WithSeller(sellerImpl).
+		WithLog(s.log)
 
 	// Register handler
 	s.handler = handlers.NewHandlerImpl(s.service, s.log)

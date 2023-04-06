@@ -19,8 +19,18 @@ func (s *ServiceImpl) Login(ctx context.Context, payload *dto.LoginRequest) (tok
 	switch payload.Role {
 	case constants.BUYER:
 		info, err = s.buyerImpl.GetEmail(ctx, payload.Email)
+		if err != nil {
+			s.log.Errorf("[ERR] While getting password", err)
+			return "", errors.GetError(errors.InternalServer, err)
+		}
 	case constants.SELLER:
-		return "", errors.GetError(errors.InvalidRequest, fmt.Errorf("[ERR] %v", "Not implemented"))
+		info, err = s.sellerImpl.GetEmail(ctx, payload.Email)
+		if err != nil {
+			s.log.Errorf("[ERR] While getting password", err)
+			return "", errors.GetError(errors.InternalServer, err)
+		}
+	default:
+		return "", errors.GetError(errors.InvalidRequest, fmt.Errorf("[ERR] Role not found"))
 	}
 	// Check password
 	if err := bcrypt.CompareHashAndPassword([]byte(info.Password), []byte(payload.Password)); err != nil {
