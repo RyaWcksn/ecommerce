@@ -8,6 +8,8 @@ import (
 	"github.com/RyaWcksn/ecommerce/dto"
 	"github.com/RyaWcksn/ecommerce/entities"
 	"github.com/RyaWcksn/ecommerce/pkgs/errors"
+	"github.com/RyaWcksn/ecommerce/pkgs/tokens"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // Login implements IService
@@ -20,6 +22,28 @@ func (s *ServiceImpl) Login(ctx context.Context, payload *dto.LoginRequest) (tok
 	case constants.SELLER:
 		return "", errors.GetError(errors.InvalidRequest, fmt.Errorf("[ERR] %v", "Not implemented"))
 	}
+	// Check password
+	if err := bcrypt.CompareHashAndPassword([]byte(info.Password), []byte(payload.Password)); err != nil {
+		s.log.Errorf("[ERR] While compare password with hash", err)
+		return "", errors.GetError(errors.InvalidRequest, err)
+	}
 
-	return info.Password, nil
+	fmt.Println("Masuk sini")
+	token, err = tokens.GenerateJWT(payload)
+	if err != nil {
+		s.log.Errorf("[ERR] While generating token", err)
+		return "", errors.GetError(errors.InternalServer, err)
+	}
+
+	return token, nil
+}
+
+func generatePasswordHash(password string) (string, error) {
+	// generate a hash of the password using bcrypt
+	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return "", err
+	}
+
+	return string(hash), nil
 }

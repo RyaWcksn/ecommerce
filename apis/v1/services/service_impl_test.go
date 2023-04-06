@@ -20,6 +20,7 @@ func TestServiceImpl_Login(t *testing.T) {
 	sellerMock := repositories.NewMockISeller(ctrl)
 	productMock := repositories.NewMockIProduct(ctrl)
 	orderMock := repositories.NewMockIOrder(ctrl)
+	log := logger.New("", "", "")
 
 	type fields struct {
 		buyerImpl   repositories.IBuyer
@@ -33,11 +34,10 @@ func TestServiceImpl_Login(t *testing.T) {
 		payload *dto.LoginRequest
 	}
 	tests := []struct {
-		name      string
-		args      args
-		WantMock  func()
-		wantToken string
-		wantErr   bool
+		name     string
+		args     args
+		WantMock func()
+		wantErr  bool
 	}{
 		{
 			name: "Success",
@@ -50,11 +50,14 @@ func TestServiceImpl_Login(t *testing.T) {
 				},
 			},
 			WantMock: func() {
-				buyerMock.EXPECT().GetEmail(gomock.Any(), gomock.Any()).Return(&entities.LoginEntity{Email: "user@mail.com", Password: "password123"}, nil)
+				buyerMock.EXPECT().GetEmail(gomock.Any(), gomock.Any()).Return(
+					&entities.LoginEntity{
+						Email:    "user@mail.com",
+						Password: "$2a$10$xCniCdjZENytpQ7/NTNQduSJaZ6pl3bFMbd7bfF4OLwwbCyhGH8rC"},
+					nil)
 			},
 
-			wantToken: "password123",
-			wantErr:   false,
+			wantErr: false,
 		},
 	}
 	for _, tt := range tests {
@@ -64,14 +67,15 @@ func TestServiceImpl_Login(t *testing.T) {
 				WithBuyer(buyerMock).
 				WithSeller(sellerMock).
 				WithOrder(orderMock).
-				WithProduct(productMock)
+				WithProduct(productMock).
+				WithLog(log)
 			gotToken, err := s.Login(tt.args.ctx, tt.args.payload)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("ServiceImpl.Login() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if gotToken != tt.wantToken {
-				t.Errorf("ServiceImpl.Login() = %v, want %v", gotToken, tt.wantToken)
+			if gotToken == "" {
+				t.Errorf("ServiceImpl.Login()")
 			}
 		})
 	}

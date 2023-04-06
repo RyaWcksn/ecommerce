@@ -44,4 +44,9 @@ func (s *ServiceImpl) WithProduct(p repositories.IProduct) *ServiceImpl {
 	return s
 }
 
+func (s *ServiceImpl) WithLog(l logger.ILogger) *ServiceImpl {
+	s.log = l
+	return s
+}
+
 var _ IService = (*ServiceImpl)(nil)
