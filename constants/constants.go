@@ -7,4 +7,13 @@ const (
 )
 
 // Endpoints
-const ()
+const (
+	LoginEndpoint = "/api/v1/login"
+)
+
+// Header
+const (
+	HeaderContentType   = "Content-Type"
+	HeaderAccept        = "Accept"
+	MIMEApplicationJson = "application/json"
+)

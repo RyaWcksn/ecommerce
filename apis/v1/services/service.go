@@ -8,6 +8,7 @@ import (
 	"github.com/RyaWcksn/ecommerce/pkgs/logger"
 )
 
+//go:generate mockgen -source service.go -destination service_mock.go -package services
 type IService interface {
 	Login(ctx context.Context, payload *dto.LoginRequest) (token string, err error)
 }

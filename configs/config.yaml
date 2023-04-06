@@ -1,0 +1,13 @@
+app:
+  env: "dev"
+  app_name: "dev"
+  log_level: "debug"
+server:
+  httpaddress: "9000"
+database:
+  host: "127.0.0.1:3306"
+  username: "aya"
+  password: "p4ssw0rd1"
+  database: "ecommerce"
+  maxiddle: 10
+  maxopen: 10

@@ -28,7 +28,6 @@ func (s *ServiceImpl) Login(ctx context.Context, payload *dto.LoginRequest) (tok
 		return "", errors.GetError(errors.InvalidRequest, err)
 	}
 
-	fmt.Println("Masuk sini")
 	token, err = tokens.GenerateJWT(payload)
 	if err != nil {
 		s.log.Errorf("[ERR] While generating token", err)
@@ -36,14 +35,4 @@ func (s *ServiceImpl) Login(ctx context.Context, payload *dto.LoginRequest) (tok
 	}
 
 	return token, nil
-}
-
-func generatePasswordHash(password string) (string, error) {
-	// generate a hash of the password using bcrypt
-	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-	if err != nil {
-		return "", err
-	}
-
-	return string(hash), nil
 }
