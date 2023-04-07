@@ -11,4 +11,5 @@ type IOrder interface {
 	CreateOrder(ctx context.Context, entity *entities.CreateOrder) error
 	SellerViewOrderList(ctx context.Context, id int) (order *[]entities.Order, err error)
 	UpdateOrder(ctx context.Context, id int) (order *entities.Order, err error)
+	BuyerViewOrderList(ctx context.Context, id int) (order *[]entities.Order, err error)
 }

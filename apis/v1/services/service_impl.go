@@ -172,3 +172,17 @@ func (s *ServiceImpl) UpdateOrderStatus(ctx context.Context, payload *dto.Accept
 	}
 	return order, nil
 }
+
+// GetBuyerOrderList implements IService
+func (s *ServiceImpl) GetBuyerOrderList(ctx context.Context) (orderList *[]entities.Order, err error) {
+	idStr := ctx.Value("id").(string)
+	id, _ := strconv.Atoi(idStr)
+
+	orders, err := s.orderImpl.BuyerViewOrderList(ctx, id)
+	if err != nil {
+		s.log.Errorf("[ERR] Error while getting orders data := %v", err)
+		return nil, err
+	}
+
+	return orders, nil
+}

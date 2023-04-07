@@ -35,6 +35,21 @@ func (m *MockIOrder) EXPECT() *MockIOrderMockRecorder {
 	return m.recorder
 }
 
+// BuyerViewOrderList mocks base method.
+func (m *MockIOrder) BuyerViewOrderList(ctx context.Context, id int) (*[]entities.Order, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "BuyerViewOrderList", ctx, id)
+	ret0, _ := ret[0].(*[]entities.Order)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// BuyerViewOrderList indicates an expected call of BuyerViewOrderList.
+func (mr *MockIOrderMockRecorder) BuyerViewOrderList(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BuyerViewOrderList", reflect.TypeOf((*MockIOrder)(nil).BuyerViewOrderList), ctx, id)
+}
+
 // CreateOrder mocks base method.
 func (m *MockIOrder) CreateOrder(ctx context.Context, entity *entities.CreateOrder) error {
 	m.ctrl.T.Helper()

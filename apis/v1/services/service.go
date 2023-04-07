@@ -22,6 +22,7 @@ type IService interface {
 
 	// Buyer
 	CreateOrder(ctx context.Context, payload *dto.CreateOrderRequest) (resp *entities.OrderStatus, err error)
+	GetBuyerOrderList(ctx context.Context) (orderList *[]entities.Order, err error)
 }
 
 type ServiceImpl struct {

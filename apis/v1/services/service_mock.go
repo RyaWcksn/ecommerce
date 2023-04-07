@@ -65,6 +65,21 @@ func (mr *MockIServiceMockRecorder) CreateProduct(ctx, payload interface{}) *gom
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateProduct", reflect.TypeOf((*MockIService)(nil).CreateProduct), ctx, payload)
 }
 
+// GetBuyerOrderList mocks base method.
+func (m *MockIService) GetBuyerOrderList(ctx context.Context) (*[]entities.Order, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetBuyerOrderList", ctx)
+	ret0, _ := ret[0].(*[]entities.Order)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetBuyerOrderList indicates an expected call of GetBuyerOrderList.
+func (mr *MockIServiceMockRecorder) GetBuyerOrderList(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBuyerOrderList", reflect.TypeOf((*MockIService)(nil).GetBuyerOrderList), ctx)
+}
+
 // GetProductsList mocks base method.
 func (m *MockIService) GetProductsList(ctx context.Context, id int) (*[]entities.ProductListEntity, error) {
 	m.ctrl.T.Helper()
