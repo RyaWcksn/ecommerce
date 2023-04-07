@@ -15,7 +15,7 @@ func (b *BuyerImpl) GetEmail(ctx context.Context, email string) (resp *entities.
 	defer cancel()
 
 	payload := entities.LoginEntity{}
-	err = b.DB.QueryRowContext(ctxDb, GetPasswordByEmailQuery, email).Scan(&payload.Email, &payload.Password)
+	err = b.DB.QueryRowContext(ctxDb, GetPasswordByEmailQuery, email).Scan(&payload.Id, &payload.Email, &payload.Password)
 	if err != nil {
 		b.log.Errorf("[ERR] While getting email and password := %v", err)
 		if err == sql.ErrNoRows {

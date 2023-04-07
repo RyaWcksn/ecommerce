@@ -12,3 +12,10 @@ type LoginResponse struct {
 	ResponseTime string `json:"responseTime"`
 	Token        string `json:"token"`
 }
+
+type TokenGenerator struct {
+	Id        int
+	SecretKey string
+	Email     string
+	Role      string
+}

@@ -20,7 +20,7 @@ func TestBuyerImpl_GetEmail(t *testing.T) {
 	log := logger.New("", "", "")
 
 	query := GetPasswordByEmailQuery
-	expectedRow := sqlmock.NewRows([]string{"email", "password"}).AddRow("user@mail.com", "laksjd12kljlaksjv")
+	expectedRow := sqlmock.NewRows([]string{"id", "email", "password"}).AddRow(1, "user@mail.com", "laksjd12kljlaksjv")
 	mock.ExpectQuery(query).WithArgs("user@mail.com").WillReturnRows(expectedRow)
 
 	type args struct {
@@ -40,6 +40,7 @@ func TestBuyerImpl_GetEmail(t *testing.T) {
 				email: "user@mail.com",
 			},
 			wantResp: &entities.LoginEntity{
+				Id:       1,
 				Email:    "user@mail.com",
 				Password: "laksjd12kljlaksjv",
 			},

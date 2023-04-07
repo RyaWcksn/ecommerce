@@ -3,6 +3,7 @@ package services
 import (
 	"context"
 	"fmt"
+	"strconv"
 
 	"github.com/RyaWcksn/ecommerce/constants"
 	"github.com/RyaWcksn/ecommerce/dto"
@@ -38,11 +39,37 @@ func (s *ServiceImpl) Login(ctx context.Context, payload *dto.LoginRequest) (tok
 		return "", errors.GetError(errors.InvalidRequest, err)
 	}
 
-	token, err = tokens.GenerateJWT(payload)
+	tokenPayload := dto.TokenGenerator{
+		Id:        info.Id,
+		SecretKey: s.cfg.App.SECRET,
+		Email:     payload.Email,
+		Role:      payload.Role,
+	}
+	token, err = tokens.GenerateJWT(&tokenPayload)
 	if err != nil {
 		s.log.Errorf("[ERR] While generating token", err)
 		return "", errors.GetError(errors.InternalServer, err)
 	}
 
 	return token, nil
+}
+
+// CreateProduct implements IService
+func (s *ServiceImpl) CreateProduct(ctx context.Context, payload *dto.CreateProductRequest) error {
+	idStr := ctx.Value("id").(string)
+	id, _ := strconv.Atoi(idStr)
+
+	entity := entities.CreateProductEntity{
+		Name:        payload.Name,
+		Description: payload.Description,
+		Price:       payload.Price,
+		Seller:      id,
+	}
+
+	err := s.productImpl.CreateProduct(ctx, &entity)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

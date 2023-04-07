@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
@@ -12,11 +11,11 @@ import (
 	"github.com/RyaWcksn/ecommerce/pkgs/validations"
 )
 
-// LoginHandler implements IHandler
-func (h *HandlerImpl) LoginHandler(w http.ResponseWriter, r *http.Request) error {
+// CreateProductHandler implements IHandler
+func (h *HandlerImpl) CreateProductHandler(w http.ResponseWriter, r *http.Request) error {
 	ctx := r.Context()
 
-	payload := dto.LoginRequest{}
+	payload := dto.CreateProductRequest{}
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		h.log.Errorf("[ERR] While read body := %v", err)
@@ -31,18 +30,17 @@ func (h *HandlerImpl) LoginHandler(w http.ResponseWriter, r *http.Request) error
 		h.log.Errorf("[ERR] While validating body := %v", err)
 		return errors.GetError(errors.InvalidRequest, err)
 	}
-	fmt.Println("Masuk sini ga")
 
-	token, err := h.serviceImpl.Login(ctx, &payload)
+	err = h.serviceImpl.CreateProduct(ctx, &payload)
 	if err != nil {
-		h.log.Errorf("[ERR] While getting token from service layer := %v", err)
 		return err
 	}
-	resp := dto.LoginResponse{
+
+	resp := dto.CreateProductResponse{
 		Code:         http.StatusCreated,
 		Message:      "ok",
 		ResponseTime: datetime.GetDateString(),
-		Token:        token,
+		Product:      payload,
 	}
 
 	return ResponseJson(w, resp)
