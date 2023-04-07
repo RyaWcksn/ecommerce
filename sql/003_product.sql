@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS product (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  product_name VARCHAR(255) NOT NULL,
+  description VARCHAR(255) NOT NULL,
+  price DECIMAL(10, 2) NOT NULL,
+  seller INT NOT NULL,
+  FOREIGN KEY (seller) REFERENCES seller(id)
+);

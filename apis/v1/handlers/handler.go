@@ -9,6 +9,8 @@ import (
 
 type IHandler interface {
 	LoginHandler(w http.ResponseWriter, r *http.Request) error
+
+	CreateProductHandler(w http.ResponseWriter, r *http.Request) error
 }
 
 type HandlerImpl struct {

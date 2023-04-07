@@ -5,6 +5,10 @@
 package repositories
 
 import (
+	context "context"
+	reflect "reflect"
+
+	entities "github.com/RyaWcksn/ecommerce/entities"
 	gomock "github.com/golang/mock/gomock"
 )
 
@@ -29,4 +33,18 @@ func NewMockIProduct(ctrl *gomock.Controller) *MockIProduct {
 // EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockIProduct) EXPECT() *MockIProductMockRecorder {
 	return m.recorder
+}
+
+// CreateProduct mocks base method.
+func (m *MockIProduct) CreateProduct(ctx context.Context, entity *entities.CreateProductEntity) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateProduct", ctx, entity)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// CreateProduct indicates an expected call of CreateProduct.
+func (mr *MockIProductMockRecorder) CreateProduct(ctx, entity interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateProduct", reflect.TypeOf((*MockIProduct)(nil).CreateProduct), ctx, entity)
 }

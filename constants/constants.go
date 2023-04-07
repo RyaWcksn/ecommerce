@@ -8,7 +8,8 @@ const (
 
 // Endpoints
 const (
-	LoginEndpoint = "/api/v1/login"
+	LoginEndpoint         = "/api/v1/login"
+	CreateProductEndpoint = "/api/v1/seller/create"
 )
 
 // Header

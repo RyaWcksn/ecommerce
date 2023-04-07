@@ -1,7 +1,11 @@
 package configs
 
 import (
+	"bytes"
 	"fmt"
+	"runtime"
+
+	_ "embed"
 
 	"github.com/spf13/viper"
 )
@@ -11,6 +15,7 @@ type Config struct {
 		ENV      string `mapstructure:"env"`
 		APPNAME  string `mapstructure:"app_name"`
 		LOGLEVEL string `mapstructure:"log_level"`
+		SECRET   string `mapstructure:"secret"`
 	} `mapstructure:"app"`
 	Server struct {
 		HTTPAddress string `mapstructure:"httpaddress"`
@@ -25,6 +30,9 @@ type Config struct {
 	} `mapstructure:"database"`
 }
 
+//go:embed default.yaml
+var defaultData []byte
+
 var Cfg *Config
 
 func init() {
@@ -35,18 +43,25 @@ func LoadConfig() *Config {
 	// Initialize viper
 	cfg := &Config{}
 
-	viper.SetConfigName("config")     // name of the config file (without extension)
-	viper.AddConfigPath(".")          // search the root directory for the config file
-	viper.AddConfigPath("./configs/") // search the root directory for the config file
-	viper.SetConfigType("yaml")       // use YAML config format
+	v := viper.New()
+
+	_, filePath, _, _ := runtime.Caller(0)
+	configFile := filePath[:len(filePath)-9]
+
+	v.SetConfigFile(configFile + "config" + ".yaml")
+
+	err := v.ReadConfig(bytes.NewBuffer(defaultData))
+	if err != nil {
+		panic(err)
+	}
 
 	// Load the config file
-	if err := viper.ReadInConfig(); err != nil {
+	if err := v.ReadInConfig(); err != nil {
 		panic(fmt.Errorf("failed to read config file: %s", err))
 	}
 
 	// Unmarshal the config into a struct
-	if err := viper.Unmarshal(&cfg); err != nil {
+	if err := v.Unmarshal(&cfg); err != nil {
 		panic(fmt.Errorf("failed to unmarshal config: %s", err))
 	}
 
