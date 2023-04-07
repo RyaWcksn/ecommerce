@@ -33,7 +33,7 @@ func (b *BuyerImpl) GetData(ctx context.Context, id int) (resp *entities.BuyerEn
 	defer cancel()
 
 	payload := entities.BuyerEntity{}
-	err = b.DB.QueryRowContext(ctxDb, GetPasswordByEmailQuery, id).Scan(&payload.Name, &payload.Email, &payload.AlamatPengiriman)
+	err = b.DB.QueryRowContext(ctxDb, GetBuyerDataById, id).Scan(&payload.Name, &payload.Email, &payload.AlamatPengiriman)
 	if err != nil {
 		b.log.Errorf("[ERR] While getting buyer data := %v", err)
 		if err == sql.ErrNoRows {

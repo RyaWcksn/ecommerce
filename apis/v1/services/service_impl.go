@@ -94,6 +94,7 @@ func (s *ServiceImpl) GetProductsList(ctx context.Context, id int) (productList 
 func (s *ServiceImpl) CreateOrder(ctx context.Context, payload *dto.CreateOrderRequest) (resp *entities.OrderStatus, err error) {
 	idStr := ctx.Value("id").(string)
 	id, _ := strconv.Atoi(idStr)
+	fmt.Println("ID", id)
 
 	buyerData, err := s.buyerImpl.GetData(ctx, id)
 	if err != nil {
