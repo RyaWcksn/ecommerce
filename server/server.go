@@ -91,7 +91,8 @@ func NewService(cfg *configs.Config, logger logger.ILogger) *Server {
 func (s Server) Start() {
 
 	http.Handle(constants.LoginEndpoint, middleware.ErrHandler(s.handler.LoginHandler))
-	http.Handle(constants.CreateProductEndpoint, middleware.SellerMiddleware(*s.cfg, s.handler.CreateProductHandler))
+	http.Handle(constants.CreateProductEndpoint, middleware.AuthrorizationMiddleware(constants.SELLER, *s.cfg, s.handler.CreateProductHandler))
+	http.Handle(constants.ListProductEndpoint, middleware.AuthrorizationMiddleware(constants.SELLER, *s.cfg, s.handler.GetProductListsHandler))
 
 	go func() {
 		err := http.ListenAndServe(addr, nil)

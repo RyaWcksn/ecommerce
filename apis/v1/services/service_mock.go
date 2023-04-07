@@ -9,6 +9,7 @@ import (
 	reflect "reflect"
 
 	dto "github.com/RyaWcksn/ecommerce/dto"
+	entities "github.com/RyaWcksn/ecommerce/entities"
 	gomock "github.com/golang/mock/gomock"
 )
 
@@ -47,6 +48,21 @@ func (m *MockIService) CreateProduct(ctx context.Context, payload *dto.CreatePro
 func (mr *MockIServiceMockRecorder) CreateProduct(ctx, payload interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateProduct", reflect.TypeOf((*MockIService)(nil).CreateProduct), ctx, payload)
+}
+
+// GetProductsList mocks base method.
+func (m *MockIService) GetProductsList(ctx context.Context, id int) (*[]entities.ProductListEntity, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetProductsList", ctx, id)
+	ret0, _ := ret[0].(*[]entities.ProductListEntity)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetProductsList indicates an expected call of GetProductsList.
+func (mr *MockIServiceMockRecorder) GetProductsList(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetProductsList", reflect.TypeOf((*MockIService)(nil).GetProductsList), ctx, id)
 }
 
 // Login mocks base method.

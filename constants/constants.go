@@ -8,8 +8,11 @@ const (
 
 // Endpoints
 const (
-	LoginEndpoint         = "/api/v1/login"
+	LoginEndpoint = "/api/v1/login"
+
+	// Seller
 	CreateProductEndpoint = "/api/v1/seller/create"
+	ListProductEndpoint   = "/api/v1/seller/products"
 )
 
 // Header

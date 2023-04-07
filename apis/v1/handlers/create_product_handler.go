@@ -37,7 +37,7 @@ func (h *HandlerImpl) CreateProductHandler(w http.ResponseWriter, r *http.Reques
 	}
 
 	resp := dto.CreateProductResponse{
-		Code:         http.StatusCreated,
+		Code:         http.StatusOK,
 		Message:      "ok",
 		ResponseTime: datetime.GetDateString(),
 		Product:      payload,

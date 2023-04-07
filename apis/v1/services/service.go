@@ -6,6 +6,7 @@ import (
 	"github.com/RyaWcksn/ecommerce/apis/v1/repositories"
 	"github.com/RyaWcksn/ecommerce/configs"
 	"github.com/RyaWcksn/ecommerce/dto"
+	"github.com/RyaWcksn/ecommerce/entities"
 	"github.com/RyaWcksn/ecommerce/pkgs/logger"
 )
 
@@ -13,7 +14,9 @@ import (
 type IService interface {
 	Login(ctx context.Context, payload *dto.LoginRequest) (token string, err error)
 
+	// Seller
 	CreateProduct(ctx context.Context, payload *dto.CreateProductRequest) error
+	GetProductsList(ctx context.Context, id int) (productList *[]entities.ProductListEntity, err error)
 }
 
 type ServiceImpl struct {

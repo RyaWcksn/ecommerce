@@ -68,8 +68,24 @@ func (s *ServiceImpl) CreateProduct(ctx context.Context, payload *dto.CreateProd
 
 	err := s.productImpl.CreateProduct(ctx, &entity)
 	if err != nil {
+		s.log.Errorf("[ERR] Err from domain := %v", err)
 		return err
 	}
 
 	return nil
+}
+
+// GetProductsList implements IService
+func (s *ServiceImpl) GetProductsList(ctx context.Context, id int) (productList *[]entities.ProductListEntity, err error) {
+	idStr := ctx.Value("id").(string)
+	id, _ = strconv.Atoi(idStr)
+
+	products, err := s.productImpl.ListProduct(ctx, id)
+	if err != nil {
+		s.log.Errorf("[ERR] Err from domain := %v", err)
+		return nil, err
+	}
+
+	return products, nil
+
 }

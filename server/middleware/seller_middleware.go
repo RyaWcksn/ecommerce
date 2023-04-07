@@ -8,14 +8,13 @@ import (
 	"strings"
 
 	"github.com/RyaWcksn/ecommerce/configs"
-	"github.com/RyaWcksn/ecommerce/constants"
 	"github.com/RyaWcksn/ecommerce/pkgs/errors"
 	"github.com/golang-jwt/jwt/v4"
 )
 
-type SellerNext func(http.ResponseWriter, *http.Request) error
+type AuthNext func(http.ResponseWriter, *http.Request) error
 
-func SellerMiddleware(cfg configs.Config, handler SellerNext) http.Handler {
+func AuthrorizationMiddleware(role string, cfg configs.Config, handler AuthNext) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		tokenString := r.Header.Get("Authorization")
@@ -63,17 +62,19 @@ func SellerMiddleware(cfg configs.Config, handler SellerNext) http.Handler {
 			_ = json.NewEncoder(w).Encode(xerr)
 			return
 		}
-		userRole, ok := claims["role"].(string)
-		if !ok || userRole != constants.SELLER {
-			xerr := errors.ErrorForm{
-				Code:     http.StatusForbidden,
-				Message:  "Forbidden",
-				Response: "Role is not allowed to access this resource",
+		if role != "" {
+			userRole, ok := claims["role"].(string)
+			if !ok || userRole != role {
+				xerr := errors.ErrorForm{
+					Code:     http.StatusForbidden,
+					Message:  "Forbidden",
+					Response: "Role is not allowed to access this resource",
+				}
+				w.Header().Set("Content-Type", "application/json")
+				w.WriteHeader(http.StatusUnauthorized)
+				_ = json.NewEncoder(w).Encode(xerr)
+				return
 			}
-			w.Header().Set("Content-Type", "application/json")
-			w.WriteHeader(http.StatusUnauthorized)
-			_ = json.NewEncoder(w).Encode(xerr)
-			return
 		}
 
 		id, ok := claims["id"].(float64)
@@ -91,7 +92,7 @@ func SellerMiddleware(cfg configs.Config, handler SellerNext) http.Handler {
 	})
 }
 
-func (fn SellerNext) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (fn AuthNext) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	defer func() {
 		if err := recover(); err != nil {
 			xerr := errors.ErrorForm{
