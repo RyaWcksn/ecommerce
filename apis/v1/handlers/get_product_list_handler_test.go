@@ -84,6 +84,7 @@ func TestHandlerImpl_GetProductListsHandler(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
+		tt.wantMock()
 		t.Run(tt.name, func(t *testing.T) {
 			h := NewHandlerImpl(s, l)
 			if err := h.GetProductListsHandler(tt.args.w, tt.args.r); (err != nil) != tt.wantErr {
