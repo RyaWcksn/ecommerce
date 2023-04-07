@@ -35,6 +35,21 @@ func (m *MockISeller) EXPECT() *MockISellerMockRecorder {
 	return m.recorder
 }
 
+// GetData mocks base method.
+func (m *MockISeller) GetData(ctx context.Context, id int) (*entities.SellerEntity, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetData", ctx, id)
+	ret0, _ := ret[0].(*entities.SellerEntity)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetData indicates an expected call of GetData.
+func (mr *MockISellerMockRecorder) GetData(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetData", reflect.TypeOf((*MockISeller)(nil).GetData), ctx, id)
+}
+
 // GetEmail mocks base method.
 func (m *MockISeller) GetEmail(ctx context.Context, email string) (*entities.LoginEntity, error) {
 	m.ctrl.T.Helper()

@@ -12,6 +12,7 @@ import (
 	"github.com/RyaWcksn/ecommerce/configs"
 	"github.com/RyaWcksn/ecommerce/constants"
 	"github.com/RyaWcksn/ecommerce/domain/buyer"
+	"github.com/RyaWcksn/ecommerce/domain/order"
 	"github.com/RyaWcksn/ecommerce/domain/product"
 	"github.com/RyaWcksn/ecommerce/domain/seller"
 	"github.com/RyaWcksn/ecommerce/pkgs/database"
@@ -61,12 +62,14 @@ func (s *Server) Register() {
 	buyerImpl := buyer.NewBuyerImpl(db, s.log)
 	sellerImpl := seller.NewSellerImpl(db, s.log)
 	productImpl := product.NewProductImpl(db, s.log)
+	orderImpl := order.NewOrderImpl(db, s.log)
 
 	// Register service
 	s.service = services.NewServiceImpl().
 		WithBuyer(buyerImpl).
 		WithSeller(sellerImpl).
 		WithProduct(productImpl).
+		WithOrder(orderImpl).
 		WithConfig(*s.cfg).
 		WithLog(s.log)
 
@@ -91,8 +94,13 @@ func NewService(cfg *configs.Config, logger logger.ILogger) *Server {
 func (s Server) Start() {
 
 	http.Handle(constants.LoginEndpoint, middleware.ErrHandler(s.handler.LoginHandler))
+
+	// Seller
 	http.Handle(constants.CreateProductEndpoint, middleware.AuthrorizationMiddleware(constants.SELLER, *s.cfg, s.handler.CreateProductHandler))
 	http.Handle(constants.ListProductEndpoint, middleware.AuthrorizationMiddleware(constants.SELLER, *s.cfg, s.handler.GetProductListsHandler))
+
+	// Buyer
+	http.Handle(constants.CreateOrderEndpoint, middleware.AuthrorizationMiddleware(constants.BUYER, *s.cfg, s.handler.CreateOrderHandler))
 
 	go func() {
 		err := http.ListenAndServe(addr, nil)

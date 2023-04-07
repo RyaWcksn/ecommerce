@@ -2,6 +2,7 @@ package product
 
 import (
 	"context"
+	"database/sql"
 	"time"
 
 	"github.com/RyaWcksn/ecommerce/entities"
@@ -82,4 +83,22 @@ func (p *ProductImpl) ListProduct(ctx context.Context, id int) (products *[]enti
 
 	}
 	return &productsList, nil
+}
+
+// GetProductById implements repositories.IProduct
+func (p *ProductImpl) GetProductById(ctx context.Context, id int) (product *entities.ProductListEntity, err error) {
+	ctxDb, cancel := context.WithTimeout(ctx, time.Second*3)
+	defer cancel()
+
+	payload := entities.ProductListEntity{}
+	err = p.DB.QueryRowContext(ctxDb, GetProductById, id).Scan(&payload.Id, &payload.ProductName, &payload.Description, &payload.Price, &payload.Seller)
+	if err != nil {
+		p.log.Errorf("[ERR] While getting email and password := %v", err)
+		if err == sql.ErrNoRows {
+			return nil, errors.GetError(errors.InvalidRequest, err)
+		}
+		return nil, errors.GetError(errors.InternalServer, err)
+	}
+
+	return &payload, nil
 }

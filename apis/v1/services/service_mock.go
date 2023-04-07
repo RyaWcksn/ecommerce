@@ -36,6 +36,21 @@ func (m *MockIService) EXPECT() *MockIServiceMockRecorder {
 	return m.recorder
 }
 
+// CreateOrder mocks base method.
+func (m *MockIService) CreateOrder(ctx context.Context, payload *dto.CreateOrderRequest) (*entities.OrderStatus, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateOrder", ctx, payload)
+	ret0, _ := ret[0].(*entities.OrderStatus)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateOrder indicates an expected call of CreateOrder.
+func (mr *MockIServiceMockRecorder) CreateOrder(ctx, payload interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateOrder", reflect.TypeOf((*MockIService)(nil).CreateOrder), ctx, payload)
+}
+
 // CreateProduct mocks base method.
 func (m *MockIService) CreateProduct(ctx context.Context, payload *dto.CreateProductRequest) error {
 	m.ctrl.T.Helper()
