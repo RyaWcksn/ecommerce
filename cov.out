@@ -23,7 +23,7 @@ github.com/RyaWcksn/ecommerce/apis/v1/handlers/get_product_list_handler.go:22.2,
 github.com/RyaWcksn/ecommerce/apis/v1/handlers/get_seller_orders_handler.go:11.92,15.16 3 1
 github.com/RyaWcksn/ecommerce/apis/v1/handlers/get_seller_orders_handler.go:15.16,18.3 2 0
 github.com/RyaWcksn/ecommerce/apis/v1/handlers/get_seller_orders_handler.go:20.2,27.30 2 1
-github.com/RyaWcksn/ecommerce/apis/v1/handlers/handler.go:27.73,32.2 1 1
+github.com/RyaWcksn/ecommerce/apis/v1/handlers/handler.go:28.73,33.2 1 1
 github.com/RyaWcksn/ecommerce/apis/v1/handlers/login_handler.go:16.82,21.16 4 1
 github.com/RyaWcksn/ecommerce/apis/v1/handlers/login_handler.go:21.16,24.3 2 0
 github.com/RyaWcksn/ecommerce/apis/v1/handlers/login_handler.go:25.2,25.54 1 1
@@ -33,6 +33,15 @@ github.com/RyaWcksn/ecommerce/apis/v1/handlers/login_handler.go:30.53,33.3 2 0
 github.com/RyaWcksn/ecommerce/apis/v1/handlers/login_handler.go:34.2,37.16 3 1
 github.com/RyaWcksn/ecommerce/apis/v1/handlers/login_handler.go:37.16,40.3 2 0
 github.com/RyaWcksn/ecommerce/apis/v1/handlers/login_handler.go:41.2,48.30 2 1
+github.com/RyaWcksn/ecommerce/apis/v1/handlers/update_order_handler.go:15.88,20.16 4 1
+github.com/RyaWcksn/ecommerce/apis/v1/handlers/update_order_handler.go:20.16,23.3 2 0
+github.com/RyaWcksn/ecommerce/apis/v1/handlers/update_order_handler.go:24.2,24.54 1 1
+github.com/RyaWcksn/ecommerce/apis/v1/handlers/update_order_handler.go:24.54,27.3 2 0
+github.com/RyaWcksn/ecommerce/apis/v1/handlers/update_order_handler.go:29.2,29.53 1 1
+github.com/RyaWcksn/ecommerce/apis/v1/handlers/update_order_handler.go:29.53,32.3 2 0
+github.com/RyaWcksn/ecommerce/apis/v1/handlers/update_order_handler.go:34.2,35.16 2 1
+github.com/RyaWcksn/ecommerce/apis/v1/handlers/update_order_handler.go:35.16,38.3 2 0
+github.com/RyaWcksn/ecommerce/apis/v1/handlers/update_order_handler.go:40.2,47.30 2 1
 github.com/RyaWcksn/ecommerce/apis/v1/handlers/utils.go:11.66,14.2 2 1
 github.com/RyaWcksn/ecommerce/apis/v1/services/service.go:36.36,38.2 1 1
 github.com/RyaWcksn/ecommerce/apis/v1/services/service.go:40.67,43.2 2 1

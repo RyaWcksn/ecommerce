@@ -119,7 +119,7 @@ func (o *OrderImpl) UpdateOrder(ctx context.Context, id int) (order *entities.Or
 		return nil, errors.GetError(errors.InternalServer, err)
 	}
 
-	stmt, err := tx.PrepareContext(ctxDb, InsertOrder)
+	stmt, err := tx.PrepareContext(ctxDb, UpdateStatusOrder)
 	if err != nil {
 		o.log.Errorf("[ERR] While prepare statement := %v", err)
 		return nil, errors.GetError(errors.InternalServer, err)
@@ -127,20 +127,8 @@ func (o *OrderImpl) UpdateOrder(ctx context.Context, id int) (order *entities.Or
 
 	defer stmt.Close()
 
-	row, err := stmt.ExecContext(ctxDb, 1, id)
+	_, err = stmt.ExecContext(ctxDb, 1, id)
 	if err != nil {
-		tx.Rollback()
-		o.log.Errorf("[ERR] While executing query := %v", err)
-		return nil, errors.GetError(errors.InternalServer, err)
-	}
-
-	affectedId, err := row.LastInsertId()
-	if err != nil {
-		tx.Rollback()
-		o.log.Errorf("[ERR] While executing query := %v", err)
-		return nil, errors.GetError(errors.InternalServer, err)
-	}
-	if affectedId == 0 {
 		tx.Rollback()
 		o.log.Errorf("[ERR] While executing query := %v", err)
 		return nil, errors.GetError(errors.InternalServer, err)
@@ -166,12 +154,16 @@ func (o *OrderImpl) UpdateOrder(ctx context.Context, id int) (order *entities.Or
 		&orderData.TotalPrice,
 		&status,
 	)
+	if err != nil {
+		o.log.Errorf("[ERR] While getting new data := %v", err)
+		return nil, errors.GetError(errors.InternalServer, err)
+	}
 
-	order.Status.Message = msg
-	order.Status.Status = stts
+	orderData.Status.Message = msg
+	orderData.Status.Status = stts
 	if status > 0 {
-		order.Status.Message = constants.AcceptedMessage
-		order.Status.Status = constants.Accepted
+		orderData.Status.Message = constants.AcceptedMessage
+		orderData.Status.Status = constants.Accepted
 	}
 
 	return &orderData, nil
