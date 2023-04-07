@@ -98,6 +98,7 @@ func (s Server) Start() {
 	// Seller
 	http.Handle(constants.CreateProductEndpoint, middleware.AuthrorizationMiddleware(constants.SELLER, *s.cfg, s.handler.CreateProductHandler))
 	http.Handle(constants.ListProductEndpoint, middleware.AuthrorizationMiddleware(constants.SELLER, *s.cfg, s.handler.GetProductListsHandler))
+	http.Handle(constants.ListOrderSellerEndpoint, middleware.AuthrorizationMiddleware(constants.SELLER, *s.cfg, s.handler.GetSellerOrdersHandler))
 
 	// Buyer
 	http.Handle(constants.CreateOrderEndpoint, middleware.AuthrorizationMiddleware(constants.BUYER, *s.cfg, s.handler.CreateOrderHandler))

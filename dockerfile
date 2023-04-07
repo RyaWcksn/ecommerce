@@ -20,10 +20,10 @@ RUN apk --no-cache add ca-certificates
 WORKDIR /app
 
 # Copy the executable from the build stage
-COPY --from=build /app .
-COPY --from=build /app/configs .
+COPY configs/config.yaml /app/configs/config.yaml
+COPY --from=build /app/app .
 
-# Expose port 8080 for the container
+# Expose port 9000 for the container
 EXPOSE 9000
 
 # Run the executable
