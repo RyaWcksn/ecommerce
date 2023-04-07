@@ -168,3 +168,52 @@ func (o *OrderImpl) UpdateOrder(ctx context.Context, id int) (order *entities.Or
 
 	return &orderData, nil
 }
+
+// BuyerViewOrderList implements repositories.IOrder
+func (o *OrderImpl) BuyerViewOrderList(ctx context.Context, id int) (order *[]entities.Order, err error) {
+	ctxDb, cancel := context.WithTimeout(ctx, 3*time.Second)
+	defer cancel()
+
+	msg := constants.PendingMessage
+	stts := constants.Pending
+
+	var orderList []entities.Order
+
+	rows, err := o.DB.QueryContext(ctxDb, GetByBuyerId, id)
+	if err != nil {
+		o.log.Errorf("[ERR] While query the data := %v", err)
+		return nil, errors.GetError(errors.InternalServer, err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var order entities.Order
+		var status int64
+
+		if err := rows.Scan(
+			&order.Id,
+			&order.Buyer,
+			&order.Seller,
+			&order.DeliverySource,
+			&order.DeliveryDestination,
+			&order.Items,
+			&order.Quantity,
+			&order.Price,
+			&order.TotalPrice,
+			&status,
+		); err != nil {
+			o.log.Errorf("[ERR] While query the data := %v", err)
+			return nil, errors.GetError(errors.InternalServer, err)
+		}
+		order.Status.Message = msg
+		order.Status.Status = stts
+		if status > 0 {
+			order.Status.Message = constants.AcceptedMessage
+			order.Status.Status = constants.Accepted
+		}
+
+		orderList = append(orderList, order)
+
+	}
+	return &orderList, nil
+}

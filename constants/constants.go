@@ -18,6 +18,8 @@ const (
 
 	// Buyer
 	CreateOrderEndpoint = "/api/v1/order"
+	OrderListEndpoint   = "/api/v1/orders"
+	ProductListEndpoint = "/api/v1/products"
 )
 
 // Header
