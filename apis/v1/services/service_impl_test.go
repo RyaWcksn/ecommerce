@@ -430,3 +430,95 @@ func TestServiceImpl_GetSellerOrderList(t *testing.T) {
 		})
 	}
 }
+
+func TestServiceImpl_UpdateOrderStatus(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	productMock := repositories.NewMockIProduct(ctrl)
+	buyerMock := repositories.NewMockIBuyer(ctrl)
+	sellerMock := repositories.NewMockISeller(ctrl)
+	orderMock := repositories.NewMockIOrder(ctrl)
+	log := logger.New("", "", "")
+	cfg := configs.Cfg
+
+	ctx := context.Background()
+	ctx = context.WithValue(ctx, "id", "1")
+
+	type args struct {
+		ctx     context.Context
+		payload *dto.AcceptOrderRequest
+	}
+	tests := []struct {
+		name     string
+		args     args
+		wantMock func()
+		wantResp *entities.Order
+		wantErr  bool
+	}{
+		{
+			name: "Success",
+			args: args{
+				ctx: ctx,
+				payload: &dto.AcceptOrderRequest{
+					OrderId: 1,
+				},
+			},
+			wantMock: func() {
+				orderMock.EXPECT().UpdateOrder(gomock.Any(), gomock.Any()).Return(
+					&entities.Order{
+						Id:                  1,
+						Buyer:               2,
+						Seller:              1,
+						DeliverySource:      "Jakarta",
+						DeliveryDestination: "Bandung",
+						Items:               "HG Gundam Dynames",
+						Quantity:            4,
+						Price:               "180000",
+						TotalPrice:          "180000",
+						Status: entities.OrderStatus{
+							Message: constants.AcceptedMessage,
+							Status:  constants.Accepted,
+						},
+					}, nil,
+				)
+			},
+			wantResp: &entities.Order{
+				Id:                  1,
+				Buyer:               2,
+				Seller:              1,
+				DeliverySource:      "Jakarta",
+				DeliveryDestination: "Bandung",
+				Items:               "HG Gundam Dynames",
+				Quantity:            4,
+				Price:               "180000",
+				TotalPrice:          "180000",
+				Status: entities.OrderStatus{
+					Message: constants.AcceptedMessage,
+					Status:  constants.Accepted,
+				},
+			},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		tt.wantMock()
+		t.Run(tt.name, func(t *testing.T) {
+			s := NewServiceImpl().
+				WithBuyer(buyerMock).
+				WithSeller(sellerMock).
+				WithProduct(productMock).
+				WithOrder(orderMock).
+				WithLog(log).
+				WithConfig(*cfg)
+			gotResp, err := s.UpdateOrderStatus(tt.args.ctx, tt.args.payload)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("ServiceImpl.UpdateOrderStatus() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotResp, tt.wantResp) {
+				t.Errorf("ServiceImpl.UpdateOrderStatus() = %v, want %v", gotResp, tt.wantResp)
+			}
+		})
+	}
+}

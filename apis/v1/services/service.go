@@ -18,6 +18,7 @@ type IService interface {
 	CreateProduct(ctx context.Context, payload *dto.CreateProductRequest) error
 	GetProductsList(ctx context.Context, id int) (productList *[]entities.ProductListEntity, err error)
 	GetSellerOrderList(ctx context.Context) (orderList *[]entities.Order, err error)
+	UpdateOrderStatus(ctx context.Context, payload *dto.AcceptOrderRequest) (resp *entities.Order, err error)
 
 	// Buyer
 	CreateOrder(ctx context.Context, payload *dto.CreateOrderRequest) (resp *entities.OrderStatus, err error)

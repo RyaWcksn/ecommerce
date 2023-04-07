@@ -162,3 +162,13 @@ func (s *ServiceImpl) GetSellerOrderList(ctx context.Context) (orderList *[]enti
 
 	return orders, nil
 }
+
+// UpdateOrderStatus implements IService
+func (s *ServiceImpl) UpdateOrderStatus(ctx context.Context, payload *dto.AcceptOrderRequest) (resp *entities.Order, err error) {
+	order, err := s.orderImpl.UpdateOrder(ctx, payload.OrderId)
+	if err != nil {
+		s.log.Errorf("[ERR] Error from domain layer := %v", err)
+		return nil, err
+	}
+	return order, nil
+}

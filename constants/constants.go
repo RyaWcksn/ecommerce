@@ -14,6 +14,7 @@ const (
 	CreateProductEndpoint   = "/api/v1/seller/create"
 	ListProductEndpoint     = "/api/v1/seller/products"
 	ListOrderSellerEndpoint = "/api/v1/seller/orders"
+	AcceptOrderEndpoint     = "/api/v1/seller/order/accept"
 
 	// Buyer
 	CreateOrderEndpoint = "/api/v1/order"

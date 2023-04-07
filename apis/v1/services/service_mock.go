@@ -109,3 +109,18 @@ func (mr *MockIServiceMockRecorder) Login(ctx, payload interface{}) *gomock.Call
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Login", reflect.TypeOf((*MockIService)(nil).Login), ctx, payload)
 }
+
+// UpdateOrderStatus mocks base method.
+func (m *MockIService) UpdateOrderStatus(ctx context.Context, payload *dto.AcceptOrderRequest) (*entities.Order, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateOrderStatus", ctx, payload)
+	ret0, _ := ret[0].(*entities.Order)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateOrderStatus indicates an expected call of UpdateOrderStatus.
+func (mr *MockIServiceMockRecorder) UpdateOrderStatus(ctx, payload interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateOrderStatus", reflect.TypeOf((*MockIService)(nil).UpdateOrderStatus), ctx, payload)
+}

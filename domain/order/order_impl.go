@@ -104,3 +104,67 @@ func (o *OrderImpl) SellerViewOrderList(ctx context.Context, id int) (order *[]e
 	}
 	return &orderList, nil
 }
+
+// UpdateOrder implements repositories.IOrder
+func (o *OrderImpl) UpdateOrder(ctx context.Context, id int) (order *entities.Order, err error) {
+	ctxDb, cancel := context.WithTimeout(ctx, 3*time.Second)
+	defer cancel()
+
+	msg := constants.PendingMessage
+	stts := constants.Pending
+
+	tx, err := o.DB.Begin()
+	if err != nil {
+		o.log.Errorf("[ERR] While starting transaction := %v", err)
+		return nil, errors.GetError(errors.InternalServer, err)
+	}
+
+	stmt, err := tx.PrepareContext(ctxDb, UpdateStatusOrder)
+	if err != nil {
+		o.log.Errorf("[ERR] While prepare statement := %v", err)
+		return nil, errors.GetError(errors.InternalServer, err)
+	}
+
+	defer stmt.Close()
+
+	_, err = stmt.ExecContext(ctxDb, 1, id)
+	if err != nil {
+		tx.Rollback()
+		o.log.Errorf("[ERR] While executing query := %v", err)
+		return nil, errors.GetError(errors.InternalServer, err)
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		o.log.Errorf("[ERR] While commit transaction := %v", err)
+		return nil, errors.GetError(errors.InternalServer, err)
+	}
+
+	var orderData entities.Order
+	var status int
+	err = o.DB.QueryRowContext(ctxDb, GetById, id).Scan(
+		&orderData.Id,
+		&orderData.Buyer,
+		&orderData.Seller,
+		&orderData.DeliverySource,
+		&orderData.DeliveryDestination,
+		&orderData.Items,
+		&orderData.Quantity,
+		&orderData.Price,
+		&orderData.TotalPrice,
+		&status,
+	)
+	if err != nil {
+		o.log.Errorf("[ERR] While getting new data := %v", err)
+		return nil, errors.GetError(errors.InternalServer, err)
+	}
+
+	orderData.Status.Message = msg
+	orderData.Status.Status = stts
+	if status > 0 {
+		orderData.Status.Message = constants.AcceptedMessage
+		orderData.Status.Status = constants.Accepted
+	}
+
+	return &orderData, nil
+}

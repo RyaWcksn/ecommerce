@@ -20,3 +20,14 @@ type OrdersResponse struct {
 	ResponseTime string           `json:"responseTime"`
 	Orders       []entities.Order `json:"orders"`
 }
+
+type AcceptOrderRequest struct {
+	OrderId int `json:"orderId"`
+}
+
+type AcceptOrderResponse struct {
+	Code         int            `json:"code"`
+	Message      string         `json:"message"`
+	ResponseTime string         `json:"responseTime"`
+	Order        entities.Order `json:"order"`
+}
