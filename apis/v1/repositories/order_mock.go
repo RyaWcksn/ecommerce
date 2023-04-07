@@ -63,3 +63,18 @@ func (mr *MockIOrderMockRecorder) SellerViewOrderList(ctx, id interface{}) *gomo
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SellerViewOrderList", reflect.TypeOf((*MockIOrder)(nil).SellerViewOrderList), ctx, id)
 }
+
+// UpdateOrder mocks base method.
+func (m *MockIOrder) UpdateOrder(ctx context.Context, id int) (*entities.Order, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateOrder", ctx, id)
+	ret0, _ := ret[0].(*entities.Order)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateOrder indicates an expected call of UpdateOrder.
+func (mr *MockIOrderMockRecorder) UpdateOrder(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateOrder", reflect.TypeOf((*MockIOrder)(nil).UpdateOrder), ctx, id)
+}
