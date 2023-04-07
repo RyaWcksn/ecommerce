@@ -71,7 +71,7 @@ func TestBuyerImpl_GetData(t *testing.T) {
 
 	log := logger.New("", "", "")
 
-	query := GetPasswordByEmailQuery
+	query := GetBuyerDataById
 	expectedRow := sqlmock.NewRows([]string{"name", "email", "alamat_pengiriman"}).AddRow("Arya", "user@mail.com", "Bandung")
 	mock.ExpectQuery(query).WithArgs(1).WillReturnRows(expectedRow)
 	type args struct {
