@@ -148,3 +148,17 @@ func (s *ServiceImpl) CreateOrder(ctx context.Context, payload *dto.CreateOrderR
 		Status:  constants.Pending,
 	}, nil
 }
+
+// GetSellerOrderList implements IService
+func (s *ServiceImpl) GetSellerOrderList(ctx context.Context) (orderList *[]entities.Order, err error) {
+	idStr := ctx.Value("id").(string)
+	id, _ := strconv.Atoi(idStr)
+
+	orders, err := s.orderImpl.SellerViewOrderList(ctx, id)
+	if err != nil {
+		s.log.Errorf("[ERR] Error while getting orders data := %v", err)
+		return nil, err
+	}
+
+	return orders, nil
+}

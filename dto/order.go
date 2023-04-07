@@ -13,3 +13,10 @@ type CreateOrderResponse struct {
 	ResponseTime string               `json:"responseTime"`
 	Order        entities.OrderStatus `json:"order"`
 }
+
+type OrdersResponse struct {
+	Code         int              `json:"code"`
+	Message      string           `json:"message"`
+	ResponseTime string           `json:"responseTime"`
+	Orders       []entities.Order `json:"orders"`
+}
