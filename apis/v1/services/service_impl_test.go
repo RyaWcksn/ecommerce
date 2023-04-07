@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"reflect"
 	"testing"
 
 	"github.com/RyaWcksn/ecommerce/apis/v1/repositories"
@@ -130,6 +131,119 @@ func TestServiceImpl_CreateProduct(t *testing.T) {
 				WithLog(log).WithConfig(*cfg)
 			if err := s.CreateProduct(tt.args.ctx, tt.args.payload); (err != nil) != tt.wantErr {
 				t.Errorf("ServiceImpl.CreateProduct() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestServiceImpl_GetProductsList(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	productMock := repositories.NewMockIProduct(ctrl)
+	log := logger.New("", "", "")
+
+	cfg := configs.Cfg
+
+	ctx := context.Background()
+	ctx = context.WithValue(ctx, "id", "1")
+
+	type args struct {
+		ctx context.Context
+		id  int
+	}
+	tests := []struct {
+		name            string
+		args            args
+		wantMock        func()
+		wantProductList *[]entities.ProductListEntity
+		wantErr         bool
+	}{
+		{
+			name: "Success",
+			args: args{
+				ctx: ctx,
+				id:  1,
+			},
+			wantMock: func() {
+				productMock.EXPECT().ListProduct(gomock.Any(), gomock.Any()).Return(
+					&[]entities.ProductListEntity{
+						{
+							Id:          1,
+							ProductName: "HG Dynames Gundam",
+							Description: "HG Dynames Gundam from Kidou Senshi Gundam 00",
+							Price:       "180000",
+							Seller:      1,
+						},
+						{
+							Id:          2,
+							ProductName: "HG Kyrios Gundam",
+							Description: "HG Kyrios Gundam from Kidou Senshi Gundam 00",
+							Price:       "180000",
+							Seller:      1,
+						},
+						{
+							Id:          3,
+							ProductName: "HG Exia Gundam",
+							Description: "HG Exia Gundam from Kidou Senshi Gundam 00",
+							Price:       "180000",
+							Seller:      1,
+						},
+						{
+							Id:          4,
+							ProductName: "HG Virtue Gundam",
+							Description: "HG Virtue Gundam from Kidou Senshi Gundam 00",
+							Price:       "180000",
+							Seller:      1,
+						},
+					},
+					nil,
+				)
+			},
+			wantProductList: &[]entities.ProductListEntity{
+				{
+					Id:          1,
+					ProductName: "HG Dynames Gundam",
+					Description: "HG Dynames Gundam from Kidou Senshi Gundam 00",
+					Price:       "180000",
+					Seller:      1,
+				},
+				{
+					Id:          2,
+					ProductName: "HG Kyrios Gundam",
+					Description: "HG Kyrios Gundam from Kidou Senshi Gundam 00",
+					Price:       "180000",
+					Seller:      1,
+				},
+				{
+					Id:          3,
+					ProductName: "HG Exia Gundam",
+					Description: "HG Exia Gundam from Kidou Senshi Gundam 00",
+					Price:       "180000",
+					Seller:      1,
+				},
+				{
+					Id:          4,
+					ProductName: "HG Virtue Gundam",
+					Description: "HG Virtue Gundam from Kidou Senshi Gundam 00",
+					Price:       "180000",
+					Seller:      1,
+				},
+			},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		tt.wantMock()
+		t.Run(tt.name, func(t *testing.T) {
+			s := NewServiceImpl().WithConfig(*cfg).WithLog(log).WithProduct(productMock)
+			gotProductList, err := s.GetProductsList(tt.args.ctx, tt.args.id)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("ServiceImpl.GetProductsList() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotProductList, tt.wantProductList) {
+				t.Errorf("ServiceImpl.GetProductsList() = %v, want %v", gotProductList, tt.wantProductList)
 			}
 		})
 	}

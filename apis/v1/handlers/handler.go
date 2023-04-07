@@ -10,7 +10,9 @@ import (
 type IHandler interface {
 	LoginHandler(w http.ResponseWriter, r *http.Request) error
 
+	// Seller
 	CreateProductHandler(w http.ResponseWriter, r *http.Request) error
+	GetProductListsHandler(w http.ResponseWriter, r *http.Request) error
 }
 
 type HandlerImpl struct {

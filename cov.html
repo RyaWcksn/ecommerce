@@ -1,0 +1,733 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>handlers: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">github.com/RyaWcksn/ecommerce/apis/v1/handlers/create_product_handler.go (58.8%)</option>
+				
+				<option value="file1">github.com/RyaWcksn/ecommerce/apis/v1/handlers/handler.go (100.0%)</option>
+				
+				<option value="file2">github.com/RyaWcksn/ecommerce/apis/v1/handlers/login_handler.go (57.9%)</option>
+				
+				<option value="file3">github.com/RyaWcksn/ecommerce/apis/v1/handlers/utils.go (100.0%)</option>
+				
+				<option value="file4">github.com/RyaWcksn/ecommerce/apis/v1/services/service.go (100.0%)</option>
+				
+				<option value="file5">github.com/RyaWcksn/ecommerce/apis/v1/services/service_impl.go (57.1%)</option>
+				
+				<option value="file6">github.com/RyaWcksn/ecommerce/apis/v1/services/service_mock.go (0.0%)</option>
+				
+				<option value="file7">github.com/RyaWcksn/ecommerce/domain/buyer/buyer.go (100.0%)</option>
+				
+				<option value="file8">github.com/RyaWcksn/ecommerce/domain/buyer/buyer_impl.go (60.0%)</option>
+				
+				<option value="file9">github.com/RyaWcksn/ecommerce/domain/product/product.go (100.0%)</option>
+				
+				<option value="file10">github.com/RyaWcksn/ecommerce/domain/product/product_impl.go (24.4%)</option>
+				
+				<option value="file11">github.com/RyaWcksn/ecommerce/domain/seller/seller.go (100.0%)</option>
+				
+				<option value="file12">github.com/RyaWcksn/ecommerce/domain/seller/seller_impl.go (60.0%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package handlers
+
+import (
+        "encoding/json"
+        "io"
+        "net/http"
+
+        "github.com/RyaWcksn/ecommerce/dto"
+        "github.com/RyaWcksn/ecommerce/pkgs/datetime"
+        "github.com/RyaWcksn/ecommerce/pkgs/errors"
+        "github.com/RyaWcksn/ecommerce/pkgs/validations"
+)
+
+// CreateProductHandler implements IHandler
+func (h *HandlerImpl) CreateProductHandler(w http.ResponseWriter, r *http.Request) error <span class="cov8" title="1">{
+        ctx := r.Context()
+
+        payload := dto.CreateProductRequest{}
+        body, err := io.ReadAll(r.Body)
+        if err != nil </span><span class="cov0" title="0">{
+                h.log.Errorf("[ERR] While read body := %v", err)
+                return errors.GetError(errors.InternalServer, err)
+        }</span>
+        <span class="cov8" title="1">if err = json.Unmarshal(body, &amp;payload); err != nil </span><span class="cov0" title="0">{
+                h.log.Errorf("[ERR] While unmarshal body := %v", err)
+                return errors.GetError(errors.InternalServer, err)
+        }</span>
+
+        <span class="cov8" title="1">if err = validations.Validate(payload); err != nil </span><span class="cov0" title="0">{
+                h.log.Errorf("[ERR] While validating body := %v", err)
+                return errors.GetError(errors.InvalidRequest, err)
+        }</span>
+
+        <span class="cov8" title="1">err = h.serviceImpl.CreateProduct(ctx, &amp;payload)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov8" title="1">resp := dto.CreateProductResponse{
+                Code:         http.StatusCreated,
+                Message:      "ok",
+                ResponseTime: datetime.GetDateString(),
+                Product:      payload,
+        }
+
+        return ResponseJson(w, resp)</span>
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package handlers
+
+import (
+        "net/http"
+
+        "github.com/RyaWcksn/ecommerce/apis/v1/services"
+        "github.com/RyaWcksn/ecommerce/pkgs/logger"
+)
+
+type IHandler interface {
+        LoginHandler(w http.ResponseWriter, r *http.Request) error
+
+        CreateProductHandler(w http.ResponseWriter, r *http.Request) error
+}
+
+type HandlerImpl struct {
+        serviceImpl services.IService
+        log         logger.ILogger
+}
+
+func NewHandlerImpl(s services.IService, l logger.ILogger) *HandlerImpl <span class="cov8" title="1">{
+        return &amp;HandlerImpl{
+                serviceImpl: s,
+                log:         l,
+        }
+}</span>
+
+var _ IHandler = (*HandlerImpl)(nil)
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package handlers
+
+import (
+        "encoding/json"
+        "fmt"
+        "io"
+        "net/http"
+
+        "github.com/RyaWcksn/ecommerce/dto"
+        "github.com/RyaWcksn/ecommerce/pkgs/datetime"
+        "github.com/RyaWcksn/ecommerce/pkgs/errors"
+        "github.com/RyaWcksn/ecommerce/pkgs/validations"
+)
+
+// LoginHandler implements IHandler
+func (h *HandlerImpl) LoginHandler(w http.ResponseWriter, r *http.Request) error <span class="cov8" title="1">{
+        ctx := r.Context()
+
+        payload := dto.LoginRequest{}
+        body, err := io.ReadAll(r.Body)
+        if err != nil </span><span class="cov0" title="0">{
+                h.log.Errorf("[ERR] While read body := %v", err)
+                return errors.GetError(errors.InternalServer, err)
+        }</span>
+        <span class="cov8" title="1">if err = json.Unmarshal(body, &amp;payload); err != nil </span><span class="cov0" title="0">{
+                h.log.Errorf("[ERR] While unmarshal body := %v", err)
+                return errors.GetError(errors.InternalServer, err)
+        }</span>
+
+        <span class="cov8" title="1">if err = validations.Validate(payload); err != nil </span><span class="cov0" title="0">{
+                h.log.Errorf("[ERR] While validating body := %v", err)
+                return errors.GetError(errors.InvalidRequest, err)
+        }</span>
+        <span class="cov8" title="1">fmt.Println("Masuk sini ga")
+
+        token, err := h.serviceImpl.Login(ctx, &amp;payload)
+        if err != nil </span><span class="cov0" title="0">{
+                h.log.Errorf("[ERR] While getting token from service layer := %v", err)
+                return err
+        }</span>
+        <span class="cov8" title="1">resp := dto.LoginResponse{
+                Code:         http.StatusCreated,
+                Message:      "ok",
+                ResponseTime: datetime.GetDateString(),
+                Token:        token,
+        }
+
+        return ResponseJson(w, resp)</span>
+}
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package handlers
+
+import (
+        "encoding/json"
+        "net/http"
+
+        "github.com/RyaWcksn/ecommerce/constants"
+)
+
+// ResponseJson accept a writer and a response struct that want to be sent as a json response
+func ResponseJson(w http.ResponseWriter, data interface{}) error <span class="cov8" title="1">{
+        w.Header().Set(constants.HeaderContentType, constants.MIMEApplicationJson)
+        return json.NewEncoder(w).Encode(data)
+}</span>
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package services
+
+import (
+        "context"
+
+        "github.com/RyaWcksn/ecommerce/apis/v1/repositories"
+        "github.com/RyaWcksn/ecommerce/configs"
+        "github.com/RyaWcksn/ecommerce/dto"
+        "github.com/RyaWcksn/ecommerce/entities"
+        "github.com/RyaWcksn/ecommerce/pkgs/logger"
+)
+
+//go:generate mockgen -source service.go -destination service_mock.go -package services
+type IService interface {
+        Login(ctx context.Context, payload *dto.LoginRequest) (token string, err error)
+
+        // Seller
+        CreateProduct(ctx context.Context, payload *dto.CreateProductRequest) error
+        GetProductsList(ctx context.Context, id int) (productList *[]entities.ProductListEntity, err error)
+}
+
+type ServiceImpl struct {
+        cfg         configs.Config
+        buyerImpl   repositories.IBuyer
+        sellerImpl  repositories.ISeller
+        orderImpl   repositories.IOrder
+        productImpl repositories.IProduct
+        log         logger.ILogger
+}
+
+func NewServiceImpl() *ServiceImpl <span class="cov8" title="1">{
+        return &amp;ServiceImpl{}
+}</span>
+
+func (s *ServiceImpl) WithConfig(cfg configs.Config) *ServiceImpl <span class="cov8" title="1">{
+        s.cfg = cfg
+        return s
+}</span>
+
+func (s *ServiceImpl) WithBuyer(b repositories.IBuyer) *ServiceImpl <span class="cov8" title="1">{
+        s.buyerImpl = b
+        return s
+}</span>
+
+func (s *ServiceImpl) WithSeller(sl repositories.ISeller) *ServiceImpl <span class="cov8" title="1">{
+        s.sellerImpl = sl
+        return s
+}</span>
+
+func (s *ServiceImpl) WithOrder(o repositories.IOrder) *ServiceImpl <span class="cov8" title="1">{
+        s.orderImpl = o
+        return s
+}</span>
+
+func (s *ServiceImpl) WithProduct(p repositories.IProduct) *ServiceImpl <span class="cov8" title="1">{
+        s.productImpl = p
+        return s
+}</span>
+
+func (s *ServiceImpl) WithLog(l logger.ILogger) *ServiceImpl <span class="cov8" title="1">{
+        s.log = l
+        return s
+}</span>
+
+var _ IService = (*ServiceImpl)(nil)
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package services
+
+import (
+        "context"
+        "fmt"
+        "strconv"
+
+        "github.com/RyaWcksn/ecommerce/constants"
+        "github.com/RyaWcksn/ecommerce/dto"
+        "github.com/RyaWcksn/ecommerce/entities"
+        "github.com/RyaWcksn/ecommerce/pkgs/errors"
+        "github.com/RyaWcksn/ecommerce/pkgs/tokens"
+        "golang.org/x/crypto/bcrypt"
+)
+
+// Login implements IService
+func (s *ServiceImpl) Login(ctx context.Context, payload *dto.LoginRequest) (token string, err error) <span class="cov8" title="1">{
+
+        var info = &amp;entities.LoginEntity{}
+        switch payload.Role </span>{
+        case constants.BUYER:<span class="cov8" title="1">
+                info, err = s.buyerImpl.GetEmail(ctx, payload.Email)
+                if err != nil </span><span class="cov0" title="0">{
+                        s.log.Errorf("[ERR] While getting password", err)
+                        return "", errors.GetError(errors.InternalServer, err)
+                }</span>
+        case constants.SELLER:<span class="cov0" title="0">
+                info, err = s.sellerImpl.GetEmail(ctx, payload.Email)
+                if err != nil </span><span class="cov0" title="0">{
+                        s.log.Errorf("[ERR] While getting password", err)
+                        return "", errors.GetError(errors.InternalServer, err)
+                }</span>
+        default:<span class="cov0" title="0">
+                return "", errors.GetError(errors.InvalidRequest, fmt.Errorf("[ERR] Role not found"))</span>
+        }
+        // Check password
+        <span class="cov8" title="1">if err := bcrypt.CompareHashAndPassword([]byte(info.Password), []byte(payload.Password)); err != nil </span><span class="cov0" title="0">{
+                s.log.Errorf("[ERR] While compare password with hash", err)
+                return "", errors.GetError(errors.InvalidRequest, err)
+        }</span>
+
+        <span class="cov8" title="1">tokenPayload := dto.TokenGenerator{
+                Id:        info.Id,
+                SecretKey: s.cfg.App.SECRET,
+                Email:     payload.Email,
+                Role:      payload.Role,
+        }
+        token, err = tokens.GenerateJWT(&amp;tokenPayload)
+        if err != nil </span><span class="cov0" title="0">{
+                s.log.Errorf("[ERR] While generating token", err)
+                return "", errors.GetError(errors.InternalServer, err)
+        }</span>
+
+        <span class="cov8" title="1">return token, nil</span>
+}
+
+// CreateProduct implements IService
+func (s *ServiceImpl) CreateProduct(ctx context.Context, payload *dto.CreateProductRequest) error <span class="cov8" title="1">{
+        idStr := ctx.Value("id").(string)
+        id, _ := strconv.Atoi(idStr)
+
+        entity := entities.CreateProductEntity{
+                Name:        payload.Name,
+                Description: payload.Description,
+                Price:       payload.Price,
+                Seller:      id,
+        }
+
+        err := s.productImpl.CreateProduct(ctx, &amp;entity)
+        if err != nil </span><span class="cov0" title="0">{
+                s.log.Errorf("[ERR] Err from domain := %v", err)
+                return err
+        }</span>
+
+        <span class="cov8" title="1">return nil</span>
+}
+
+// GetProductsList implements IService
+func (s *ServiceImpl) GetProductsList(ctx context.Context, id int) (productList *[]entities.ProductListEntity, err error) <span class="cov8" title="1">{
+        idStr := ctx.Value("id").(string)
+        id, _ = strconv.Atoi(idStr)
+
+        products, err := s.productImpl.ListProduct(ctx, id)
+        if err != nil </span><span class="cov0" title="0">{
+                s.log.Errorf("[ERR] Err from domain := %v", err)
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">return products, nil</span>
+
+}
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+// Source: service.go
+
+// Package services is a generated GoMock package.
+package services
+
+import (
+        context "context"
+        reflect "reflect"
+
+        dto "github.com/RyaWcksn/ecommerce/dto"
+        entities "github.com/RyaWcksn/ecommerce/entities"
+        gomock "github.com/golang/mock/gomock"
+)
+
+// MockIService is a mock of IService interface.
+type MockIService struct {
+        ctrl     *gomock.Controller
+        recorder *MockIServiceMockRecorder
+}
+
+// MockIServiceMockRecorder is the mock recorder for MockIService.
+type MockIServiceMockRecorder struct {
+        mock *MockIService
+}
+
+// NewMockIService creates a new mock instance.
+func NewMockIService(ctrl *gomock.Controller) *MockIService <span class="cov0" title="0">{
+        mock := &amp;MockIService{ctrl: ctrl}
+        mock.recorder = &amp;MockIServiceMockRecorder{mock}
+        return mock
+}</span>
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockIService) EXPECT() *MockIServiceMockRecorder <span class="cov0" title="0">{
+        return m.recorder
+}</span>
+
+// CreateProduct mocks base method.
+func (m *MockIService) CreateProduct(ctx context.Context, payload *dto.CreateProductRequest) error <span class="cov0" title="0">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "CreateProduct", ctx, payload)
+        ret0, _ := ret[0].(error)
+        return ret0
+}</span>
+
+// CreateProduct indicates an expected call of CreateProduct.
+func (mr *MockIServiceMockRecorder) CreateProduct(ctx, payload interface{}) *gomock.Call <span class="cov0" title="0">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateProduct", reflect.TypeOf((*MockIService)(nil).CreateProduct), ctx, payload)
+}</span>
+
+// GetProductsList mocks base method.
+func (m *MockIService) GetProductsList(ctx context.Context, id int) (*[]entities.ProductListEntity, error) <span class="cov0" title="0">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "GetProductsList", ctx, id)
+        ret0, _ := ret[0].(*[]entities.ProductListEntity)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// GetProductsList indicates an expected call of GetProductsList.
+func (mr *MockIServiceMockRecorder) GetProductsList(ctx, id interface{}) *gomock.Call <span class="cov0" title="0">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetProductsList", reflect.TypeOf((*MockIService)(nil).GetProductsList), ctx, id)
+}</span>
+
+// Login mocks base method.
+func (m *MockIService) Login(ctx context.Context, payload *dto.LoginRequest) (string, error) <span class="cov0" title="0">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "Login", ctx, payload)
+        ret0, _ := ret[0].(string)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// Login indicates an expected call of Login.
+func (mr *MockIServiceMockRecorder) Login(ctx, payload interface{}) *gomock.Call <span class="cov0" title="0">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Login", reflect.TypeOf((*MockIService)(nil).Login), ctx, payload)
+}</span>
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">package buyer
+
+import (
+        "database/sql"
+
+        "github.com/RyaWcksn/ecommerce/apis/v1/repositories"
+        "github.com/RyaWcksn/ecommerce/pkgs/logger"
+)
+
+type BuyerImpl struct {
+        DB  *sql.DB
+        log logger.ILogger
+}
+
+func NewBuyerImpl(sql *sql.DB, log logger.ILogger) *BuyerImpl <span class="cov8" title="1">{
+        return &amp;BuyerImpl{
+                DB:  sql,
+                log: log,
+        }
+}</span>
+
+var _ repositories.IBuyer = (*BuyerImpl)(nil)
+</pre>
+		
+		<pre class="file" id="file8" style="display: none">package buyer
+
+import (
+        "context"
+        "database/sql"
+        "time"
+
+        "github.com/RyaWcksn/ecommerce/entities"
+        "github.com/RyaWcksn/ecommerce/pkgs/errors"
+)
+
+// GetEmail implements repositories.IBuyer
+func (b *BuyerImpl) GetEmail(ctx context.Context, email string) (resp *entities.LoginEntity, err error) <span class="cov8" title="1">{
+        ctxDb, cancel := context.WithTimeout(ctx, time.Second*3)
+        defer cancel()
+
+        payload := entities.LoginEntity{}
+        err = b.DB.QueryRowContext(ctxDb, GetPasswordByEmailQuery, email).Scan(&amp;payload.Id, &amp;payload.Email, &amp;payload.Password)
+        if err != nil </span><span class="cov0" title="0">{
+                b.log.Errorf("[ERR] While getting email and password := %v", err)
+                if err == sql.ErrNoRows </span><span class="cov0" title="0">{
+                        return nil, errors.GetError(errors.InvalidRequest, err)
+                }</span>
+                <span class="cov0" title="0">return nil, errors.GetError(errors.InternalServer, err)</span>
+        }
+
+        <span class="cov8" title="1">return &amp;payload, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file9" style="display: none">package product
+
+import (
+        "database/sql"
+
+        "github.com/RyaWcksn/ecommerce/apis/v1/repositories"
+        "github.com/RyaWcksn/ecommerce/pkgs/logger"
+)
+
+type ProductImpl struct {
+        DB  *sql.DB
+        log logger.ILogger
+}
+
+func NewProductImpl(db *sql.DB, l logger.ILogger) *ProductImpl <span class="cov8" title="1">{
+        return &amp;ProductImpl{
+                DB:  db,
+                log: l,
+        }
+}</span>
+
+var _ repositories.IProduct = (*ProductImpl)(nil)
+</pre>
+		
+		<pre class="file" id="file10" style="display: none">package product
+
+import (
+        "context"
+        "time"
+
+        "github.com/RyaWcksn/ecommerce/entities"
+        "github.com/RyaWcksn/ecommerce/pkgs/errors"
+)
+
+// CreateProduct implements repositories.IProduct
+func (p *ProductImpl) CreateProduct(ctx context.Context, entity *entities.CreateProductEntity) error <span class="cov0" title="0">{
+        ctxDb, cancel := context.WithTimeout(ctx, 3*time.Second)
+        defer cancel()
+
+        tx, err := p.DB.Begin()
+        if err != nil </span><span class="cov0" title="0">{
+                p.log.Errorf("[ERR] While starting transaction := %v", err)
+                return errors.GetError(errors.InternalServer, err)
+        }</span>
+
+        <span class="cov0" title="0">stmt, err := tx.PrepareContext(ctxDb, InsertProduct)
+        if err != nil </span><span class="cov0" title="0">{
+                p.log.Errorf("[ERR] While prepare statement := %v", err)
+                return errors.GetError(errors.InternalServer, err)
+        }</span>
+
+        <span class="cov0" title="0">defer stmt.Close()
+
+        row, err := stmt.Exec(entity.Name, entity.Description, entity.Price, entity.Seller)
+        if err != nil </span><span class="cov0" title="0">{
+                tx.Rollback()
+                p.log.Errorf("[ERR] While executing query := %v", err)
+                return errors.GetError(errors.InternalServer, err)
+        }</span>
+
+        <span class="cov0" title="0">id, err := row.LastInsertId()
+        if err != nil </span><span class="cov0" title="0">{
+                tx.Rollback()
+                p.log.Errorf("[ERR] While executing query := %v", err)
+                return errors.GetError(errors.InternalServer, err)
+        }</span>
+        <span class="cov0" title="0">if id == 0 </span><span class="cov0" title="0">{
+                tx.Rollback()
+                p.log.Errorf("[ERR] While executing query := %v", err)
+                return errors.GetError(errors.InternalServer, err)
+        }</span>
+
+        <span class="cov0" title="0">err = tx.Commit()
+        if err != nil </span><span class="cov0" title="0">{
+                p.log.Errorf("[ERR] While commit transaction := %v", err)
+                return errors.GetError(errors.InternalServer, err)
+        }</span>
+
+        <span class="cov0" title="0">return nil</span>
+
+}
+
+// ListProduct implements repositories.IProduct
+func (p *ProductImpl) ListProduct(ctx context.Context, id int) (products *[]entities.ProductListEntity, err error) <span class="cov8" title="1">{
+        ctxDb, cancel := context.WithTimeout(ctx, 3*time.Second)
+        defer cancel()
+
+        var productsList []entities.ProductListEntity
+
+        rows, err := p.DB.QueryContext(ctxDb, GetProductsSeller, id)
+        if err != nil </span><span class="cov0" title="0">{
+                p.log.Errorf("[ERR] While query the data := %v", err)
+                return nil, errors.GetError(errors.InternalServer, err)
+        }</span>
+        <span class="cov8" title="1">defer rows.Close()
+
+        for rows.Next() </span><span class="cov8" title="1">{
+                var product entities.ProductListEntity
+
+                if err := rows.Scan(&amp;product.Id, &amp;product.ProductName, &amp;product.Description, &amp;product.Price, &amp;product.Seller); err != nil </span><span class="cov0" title="0">{
+                        p.log.Errorf("[ERR] While query the data := %v", err)
+                        return nil, errors.GetError(errors.InternalServer, err)
+                }</span>
+
+                <span class="cov8" title="1">productsList = append(productsList, product)</span>
+
+        }
+        <span class="cov8" title="1">return &amp;productsList, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file11" style="display: none">package seller
+
+import (
+        "database/sql"
+
+        "github.com/RyaWcksn/ecommerce/apis/v1/repositories"
+        "github.com/RyaWcksn/ecommerce/pkgs/logger"
+)
+
+type SellerImpl struct {
+        DB  *sql.DB
+        log logger.ILogger
+}
+
+func NewSellerImpl(sql *sql.DB, log logger.ILogger) *SellerImpl <span class="cov8" title="1">{
+        return &amp;SellerImpl{
+                DB:  sql,
+                log: log,
+        }
+}</span>
+
+var _ repositories.ISeller = (*SellerImpl)(nil)
+</pre>
+		
+		<pre class="file" id="file12" style="display: none">package seller
+
+import (
+        "context"
+        "database/sql"
+        "time"
+
+        "github.com/RyaWcksn/ecommerce/entities"
+        "github.com/RyaWcksn/ecommerce/pkgs/errors"
+)
+
+// GetEmail implements repositories.ISeller
+func (s *SellerImpl) GetEmail(ctx context.Context, email string) (resp *entities.LoginEntity, err error) <span class="cov8" title="1">{
+        ctxDb, cancel := context.WithTimeout(ctx, time.Second*3)
+        defer cancel()
+
+        payload := entities.LoginEntity{}
+        err = s.DB.QueryRowContext(ctxDb, GetPasswordByEmailQuery, email).Scan(&amp;payload.Id, &amp;payload.Email, &amp;payload.Password)
+        if err != nil </span><span class="cov0" title="0">{
+                s.log.Errorf("[ERR] While getting email and password := %v", err)
+                if err == sql.ErrNoRows </span><span class="cov0" title="0">{
+                        return nil, errors.GetError(errors.InvalidRequest, err)
+                }</span>
+                <span class="cov0" title="0">return nil, errors.GetError(errors.InternalServer, err)</span>
+        }
+
+        <span class="cov8" title="1">return &amp;payload, nil</span>
+}
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>
