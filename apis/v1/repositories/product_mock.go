@@ -49,6 +49,21 @@ func (mr *MockIProductMockRecorder) CreateProduct(ctx, entity interface{}) *gomo
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateProduct", reflect.TypeOf((*MockIProduct)(nil).CreateProduct), ctx, entity)
 }
 
+// GetProductById mocks base method.
+func (m *MockIProduct) GetProductById(ctx context.Context, id int) (*entities.ProductListEntity, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetProductById", ctx, id)
+	ret0, _ := ret[0].(*entities.ProductListEntity)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetProductById indicates an expected call of GetProductById.
+func (mr *MockIProductMockRecorder) GetProductById(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetProductById", reflect.TypeOf((*MockIProduct)(nil).GetProductById), ctx, id)
+}
+
 // ListProduct mocks base method.
 func (m *MockIProduct) ListProduct(ctx context.Context, id int) (*[]entities.ProductListEntity, error) {
 	m.ctrl.T.Helper()

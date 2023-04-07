@@ -145,3 +145,56 @@ func TestProductImpl_ListProduct(t *testing.T) {
 		})
 	}
 }
+
+func TestProductImpl_GetProductById(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("Failed to create mock: %v", err)
+	}
+	defer db.Close()
+
+	log := logger.New("", "", "")
+
+	query := GetProductById
+	expectedRow := sqlmock.NewRows([]string{"id", "product_name", "description", "price", "seller"}).AddRow(1, "HG Dynames Gundam", "HG Dynames Gundam from Kidou Senshi Gundam 00", "180000", 1)
+	mock.ExpectQuery(query).WithArgs(1).WillReturnRows(expectedRow)
+	type args struct {
+		ctx context.Context
+		id  int
+	}
+	tests := []struct {
+		name        string
+		args        args
+		wantProduct *entities.ProductListEntity
+		wantErr     bool
+	}{
+		{
+			name: "Success",
+			args: args{
+				ctx: context.Background(),
+				id:  1,
+			},
+			wantProduct: &entities.ProductListEntity{
+				Id:          1,
+				ProductName: "HG Dynames Gundam",
+				Description: "HG Dynames Gundam from Kidou Senshi Gundam 00",
+				Price:       "180000",
+				Seller:      1,
+			},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			p := NewProductImpl(db, log)
+			gotProduct, err := p.GetProductById(tt.args.ctx, tt.args.id)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("ProductImpl.GetProductById() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotProduct, tt.wantProduct) {
+				t.Errorf("ProductImpl.GetProductById() = %v, want %v", gotProduct, tt.wantProduct)
+			}
+		})
+	}
+}

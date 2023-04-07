@@ -7,6 +7,7 @@ import (
 
 	"github.com/RyaWcksn/ecommerce/apis/v1/repositories"
 	"github.com/RyaWcksn/ecommerce/configs"
+	"github.com/RyaWcksn/ecommerce/constants"
 	"github.com/RyaWcksn/ecommerce/dto"
 	"github.com/RyaWcksn/ecommerce/entities"
 	"github.com/RyaWcksn/ecommerce/pkgs/logger"
@@ -244,6 +245,95 @@ func TestServiceImpl_GetProductsList(t *testing.T) {
 			}
 			if !reflect.DeepEqual(gotProductList, tt.wantProductList) {
 				t.Errorf("ServiceImpl.GetProductsList() = %v, want %v", gotProductList, tt.wantProductList)
+			}
+		})
+	}
+}
+
+func TestServiceImpl_CreateOrder(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	productMock := repositories.NewMockIProduct(ctrl)
+	buyerMock := repositories.NewMockIBuyer(ctrl)
+	sellerMock := repositories.NewMockISeller(ctrl)
+	orderMock := repositories.NewMockIOrder(ctrl)
+	log := logger.New("", "", "")
+	cfg := configs.Cfg
+
+	ctx := context.Background()
+	ctx = context.WithValue(ctx, "id", "1")
+	type args struct {
+		ctx     context.Context
+		payload *dto.CreateOrderRequest
+	}
+	tests := []struct {
+		name     string
+		args     args
+		wantMock func()
+		wantResp *entities.OrderStatus
+		wantErr  bool
+	}{
+		{
+			name: "Success",
+			args: args{
+				ctx: ctx,
+				payload: &dto.CreateOrderRequest{
+					ProductId: []int{1},
+					SellerId:  1,
+				},
+			},
+			wantMock: func() {
+				productMock.EXPECT().GetProductById(gomock.Any(), gomock.Any()).Return(
+					&entities.ProductListEntity{
+						Id:          1,
+						ProductName: "HG Dynames Gundam",
+						Description: "HG Dynames Gundam from Kidou Senshi Gundam 00",
+						Price:       "180000",
+						Seller:      1,
+					},
+					nil,
+				)
+				buyerMock.EXPECT().GetData(gomock.Any(), gomock.Any()).Return(
+					&entities.BuyerEntity{
+						Name:             "User",
+						Email:            "user@mail.com",
+						AlamatPengiriman: "Bandung",
+					}, nil,
+				)
+				sellerMock.EXPECT().GetData(gomock.Any(), gomock.Any()).Return(
+					&entities.SellerEntity{
+						Name:         "Arya",
+						Email:        "arya@mail.com",
+						AlamatPickup: "Jakarta",
+					}, nil,
+				)
+				orderMock.EXPECT().CreateOrder(gomock.Any(), gomock.Any()).Return(nil)
+			},
+			wantResp: &entities.OrderStatus{
+				Message: constants.PendingMessage,
+				Status:  constants.Pending,
+			},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		tt.wantMock()
+		t.Run(tt.name, func(t *testing.T) {
+			s := NewServiceImpl().
+				WithBuyer(buyerMock).
+				WithSeller(sellerMock).
+				WithProduct(productMock).
+				WithOrder(orderMock).
+				WithLog(log).
+				WithConfig(*cfg)
+			gotResp, err := s.CreateOrder(tt.args.ctx, tt.args.payload)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("ServiceImpl.CreateOrder() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotResp, tt.wantResp) {
+				t.Errorf("ServiceImpl.CreateOrder() = %v, want %v", gotResp, tt.wantResp)
 			}
 		})
 	}

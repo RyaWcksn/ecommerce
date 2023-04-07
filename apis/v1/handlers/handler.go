@@ -13,6 +13,9 @@ type IHandler interface {
 	// Seller
 	CreateProductHandler(w http.ResponseWriter, r *http.Request) error
 	GetProductListsHandler(w http.ResponseWriter, r *http.Request) error
+
+	// Buyer
+	CreateOrderHandler(w http.ResponseWriter, r *http.Request) error
 }
 
 type HandlerImpl struct {
