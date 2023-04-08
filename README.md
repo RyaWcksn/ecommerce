@@ -19,6 +19,9 @@ Ecommerce for seller and buyer
         - [Seller Get Products](#seller-get-products)
         - [Seller Get Orders](#seller-get-orders)
         - [Seller Accept Order](#seller-accept-order)
+        - [Buyer Create Order](#buyer-create-order)
+        - [Buyer Get Products](#buyer-get-products)
+        - [Buyer Get Orders](#buyer-get-orders)
 
 <!-- markdown-toc end -->
 
@@ -227,5 +230,128 @@ Authorization: Bearer {JWT-TOKEN}
             "status": "ACCEPTED"
         }
     }
+}
+```
+
+### Buyer Create Order
+
+- Header
+Content-Type: Application/json
+Accept: Application/json
+Authorization: Bearer {JWT-TOKEN}
+
+- Request
+```json
+{
+    "productId": [3],
+    "sellerId": 1
+}
+```
+
+- Response
+```json
+{
+    "code": 201,
+    "message": "ok",
+    "responseTime": "20230408103743",
+    "order": {
+        "message": "Waiting Seller to accept order",
+        "status": "PENDING"
+    }
+}
+```
+
+### Buyer Get Products
+
+- Header
+Content-Type: Application/json
+Accept: Application/json
+Authorization: Bearer {JWT-TOKEN}
+
+- Response
+```json
+{
+    "code": 200,
+    "message": "ok",
+    "responseTime": "20230408102805",
+    "products": [
+        {
+            "id": 1,
+            "productName": "HG Dynames Gundam",
+            "description": "HG Dynames Gundam from Kidou Senshi Gundam 00",
+            "price": "18000.00",
+            "seller": 1
+        },
+        {
+            "id": 2,
+            "productName": "HG Exia Gundam",
+            "description": "HG Exia Gundam from Kidou Senshi Gundam 00",
+            "price": "18000.00",
+            "seller": 1
+        },
+        {
+            "id": 3,
+            "productName": "HG Kyrios Gundam",
+            "description": "HG Kyrios Gundam from Kidou Senshi Gundam 00",
+            "price": "18000.00",
+            "seller": 1
+        },
+        {
+            "id": 4,
+            "productName": "HG Virtue Gundam",
+            "description": "HG Virtue Gundam from Kidou Senshi Gundam 00",
+            "price": "18000.00",
+            "seller": 1
+        }
+    ]
+}
+```
+
+
+### Buyer Get Orders
+
+- Header
+Content-Type: Application/json
+Accept: Application/json
+Authorization: Bearer {JWT-TOKEN}
+
+- Response
+```json
+{
+    "code": 200,
+    "message": "ok",
+    "responseTime": "20230408104836",
+    "orders": [
+        {
+            "Id": 1,
+            "Buyer": 1,
+            "Seller": 1,
+            "DeliverySource": "123 Main St",
+            "DeliveryDestination": "123 Main St",
+            "Items": ", HG Dynames Gundam",
+            "Quantity": 1,
+            "Price": "0",
+            "TotalPrice": "0.00",
+            "Status": {
+                "message": "Seller is accepted the order",
+                "status": "ACCEPTED"
+            }
+        },
+        {
+            "Id": 2,
+            "Buyer": 1,
+            "Seller": 1,
+            "DeliverySource": "123 Main St",
+            "DeliveryDestination": "123 Main St",
+            "Items": ", HG Kyrios Gundam",
+            "Quantity": 1,
+            "Price": "0",
+            "TotalPrice": "0.00",
+            "Status": {
+                "message": "Seller is accepted the order",
+                "status": "ACCEPTED"
+            }
+        }
+    ]
 }
 ```
