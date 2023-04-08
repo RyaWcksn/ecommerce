@@ -189,5 +189,11 @@ func (s *ServiceImpl) GetBuyerOrderList(ctx context.Context) (orderList *[]entit
 
 // GetProducts implements IService
 func (s *ServiceImpl) GetProducts(ctx context.Context) (productList *[]entities.ProductListEntity, err error) {
-	panic("unimplemented")
+	products, err := s.productImpl.GetAllProducts(ctx)
+	if err != nil {
+		s.log.Errorf("[ERR] Err from domain := %v", err)
+		return nil, err
+	}
+
+	return products, nil
 }
