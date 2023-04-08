@@ -4,6 +4,24 @@
 
 Ecommerce for seller and buyer
 
+> This usecase will be as Gunpla store who sell gundam model kits
+
+
+<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
+**Table of Contents**
+
+- [ecommerce](#ecommerce)
+    - [Common Errors](#common-errors)
+    - [Endpoints](#endpoints)
+    - [Requests and Response](#requests-and-response)
+        - [Login](#login)
+        - [Seller Create Product](#seller-create-product)
+        - [Seller Get Products](#seller-get-products)
+        - [Seller Get Orders](#seller-get-orders)
+        - [Seller Accept Order](#seller-accept-order)
+
+<!-- markdown-toc end -->
+
 
 ## Common Errors
 
@@ -148,15 +166,6 @@ Content-Type: Application/json
 Accept: Application/json
 Authorization: Bearer {JWT-TOKEN}
 
-- Request
-```json
-{
-    "name": "HG Zaku I Origin",
-    "description": "HG Zaku I Origin from Kidou Senshi Gundam Origin",
-    "price": "18000"
-}
-```
-
 - Response
 ```json
 {
@@ -180,5 +189,43 @@ Authorization: Bearer {JWT-TOKEN}
             }
         }
     ]
+}
+```
+
+### Seller Accept Order
+
+- Header
+Content-Type: Application/json
+Accept: Application/json
+Authorization: Bearer {JWT-TOKEN}
+
+- Request
+```json
+{
+    "orderId": 2
+}
+```
+
+- Response
+```json
+{
+    "code": 200,
+    "message": "ok",
+    "responseTime": "20230408103804",
+    "order": {
+        "Id": 2,
+        "Buyer": 1,
+        "Seller": 1,
+        "DeliverySource": "123 Main St",
+        "DeliveryDestination": "123 Main St",
+        "Items": ", HG Kyrios Gundam",
+        "Quantity": 1,
+        "Price": "0",
+        "TotalPrice": "0.00",
+        "Status": {
+            "message": "Seller is accepted the order",
+            "status": "ACCEPTED"
+        }
+    }
 }
 ```
