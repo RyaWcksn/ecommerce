@@ -109,8 +109,8 @@ func (s *ServiceImpl) CreateOrder(ctx context.Context, payload *dto.CreateOrderR
 	}
 
 	var items string
-	var total int
-	var grandTotal string
+	var total float64
+	var grandTotal float64
 	var quantity int
 	for _, productId := range payload.ProductId {
 		product, err := s.productImpl.GetProductById(ctx, productId)
@@ -118,10 +118,9 @@ func (s *ServiceImpl) CreateOrder(ctx context.Context, payload *dto.CreateOrderR
 			s.log.Errorf("[ERR] Error while getting product data := %v", err)
 			return nil, err
 		}
-		price, _ := strconv.Atoi(product.Price)
-		total += price
+		total += product.Price
+		grandTotal += product.Price
 		items += ", " + product.ProductName
-		grandTotal = strconv.Itoa(total)
 		quantity++
 	}
 
@@ -132,7 +131,7 @@ func (s *ServiceImpl) CreateOrder(ctx context.Context, payload *dto.CreateOrderR
 		DeliveryDestination: sellerData.AlamatPickup,
 		Items:               items,
 		Quantity:            quantity,
-		Price:               strconv.Itoa(total),
+		Price:               total,
 		TotalPrice:          grandTotal,
 		Status:              0,
 	}

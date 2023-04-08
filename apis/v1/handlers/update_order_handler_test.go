@@ -60,8 +60,8 @@ func TestHandlerImpl_AcceptOrderHandler(t *testing.T) {
 						DeliveryDestination: "Bandung",
 						Items:               "HG Gundam Dynames",
 						Quantity:            4,
-						Price:               "180000",
-						TotalPrice:          "180000",
+						Price:               180000.00,
+						TotalPrice:          180000.00,
 						Status: entities.OrderStatus{
 							Message: constants.AcceptedMessage,
 							Status:  constants.Accepted,

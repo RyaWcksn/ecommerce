@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
@@ -31,7 +30,6 @@ func (h *HandlerImpl) LoginHandler(w http.ResponseWriter, r *http.Request) error
 		h.log.Errorf("[ERR] While validating body := %v", err)
 		return errors.GetError(errors.InvalidRequest, err)
 	}
-	fmt.Println("Masuk sini ga")
 
 	token, err := h.serviceImpl.Login(ctx, &payload)
 	if err != nil {

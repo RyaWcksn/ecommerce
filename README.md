@@ -273,34 +273,48 @@ Authorization: Bearer {JWT-TOKEN}
 {
     "code": 200,
     "message": "ok",
-    "responseTime": "20230408102805",
+    "responseTime": "20230408111515",
     "products": [
         {
             "id": 1,
             "productName": "HG Dynames Gundam",
             "description": "HG Dynames Gundam from Kidou Senshi Gundam 00",
-            "price": "18000.00",
+            "price": 18000,
             "seller": 1
         },
         {
             "id": 2,
             "productName": "HG Exia Gundam",
             "description": "HG Exia Gundam from Kidou Senshi Gundam 00",
-            "price": "18000.00",
+            "price": 18000,
             "seller": 1
         },
         {
             "id": 3,
             "productName": "HG Kyrios Gundam",
             "description": "HG Kyrios Gundam from Kidou Senshi Gundam 00",
-            "price": "18000.00",
+            "price": 18000,
             "seller": 1
         },
         {
             "id": 4,
             "productName": "HG Virtue Gundam",
             "description": "HG Virtue Gundam from Kidou Senshi Gundam 00",
-            "price": "18000.00",
+            "price": 18000,
+            "seller": 1
+        },
+        {
+            "id": 5,
+            "productName": "HG Zaku I Origin",
+            "description": "HG Zaku I Origin from Kidou Senshi Gundam Origin",
+            "price": 18000,
+            "seller": 1
+        },
+        {
+            "id": 6,
+            "productName": "HG Zaku II Origin",
+            "description": "HG Zaku II Origin from Kidou Senshi Gundam Origin",
+            "price": 180000,
             "seller": 1
         }
     ]
@@ -320,7 +334,7 @@ Authorization: Bearer {JWT-TOKEN}
 {
     "code": 200,
     "message": "ok",
-    "responseTime": "20230408104836",
+    "responseTime": "20230408111414",
     "orders": [
         {
             "Id": 1,
@@ -328,13 +342,13 @@ Authorization: Bearer {JWT-TOKEN}
             "Seller": 1,
             "DeliverySource": "123 Main St",
             "DeliveryDestination": "123 Main St",
-            "Items": ", HG Dynames Gundam",
+            "Items": ", HG Kyrios Gundam",
             "Quantity": 1,
-            "Price": "0",
-            "TotalPrice": "0.00",
+            "Price": 18000,
+            "TotalPrice": 18000,
             "Status": {
-                "message": "Seller is accepted the order",
-                "status": "ACCEPTED"
+                "message": "Waiting Seller to accept order",
+                "status": "PENDING"
             }
         },
         {
@@ -343,13 +357,28 @@ Authorization: Bearer {JWT-TOKEN}
             "Seller": 1,
             "DeliverySource": "123 Main St",
             "DeliveryDestination": "123 Main St",
-            "Items": ", HG Kyrios Gundam",
+            "Items": ", HG Zaku II Origin",
             "Quantity": 1,
-            "Price": "0",
-            "TotalPrice": "0.00",
+            "Price": 180000,
+            "TotalPrice": 180000,
             "Status": {
-                "message": "Seller is accepted the order",
-                "status": "ACCEPTED"
+                "message": "Waiting Seller to accept order",
+                "status": "PENDING"
+            }
+        },
+        {
+            "Id": 3,
+            "Buyer": 1,
+            "Seller": 1,
+            "DeliverySource": "123 Main St",
+            "DeliveryDestination": "123 Main St",
+            "Items": ", HG Dynames Gundam, HG Exia Gundam, HG Kyrios Gundam, HG Virtue Gundam, HG Zaku I Origin, HG Zaku II Origin",
+            "Quantity": 6,
+            "Price": 270000,
+            "TotalPrice": 270000,
+            "Status": {
+                "message": "Waiting Seller to accept order",
+                "status": "PENDING"
             }
         }
     ]

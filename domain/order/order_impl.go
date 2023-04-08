@@ -2,6 +2,7 @@ package order
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/RyaWcksn/ecommerce/constants"
@@ -207,6 +208,8 @@ func (o *OrderImpl) BuyerViewOrderList(ctx context.Context, id int) (order *[]en
 		}
 		order.Status.Message = msg
 		order.Status.Status = stts
+		fmt.Println(order.Price)
+		fmt.Println(order.TotalPrice)
 		if status > 0 {
 			order.Status.Message = constants.AcceptedMessage
 			order.Status.Status = constants.Accepted

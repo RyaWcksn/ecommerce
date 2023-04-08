@@ -7,8 +7,8 @@ type CreateOrder struct {
 	DeliveryDestination string
 	Items               string
 	Quantity            int
-	Price               string
-	TotalPrice          string
+	Price               float64
+	TotalPrice          float64
 	Status              int
 }
 
@@ -25,7 +25,7 @@ type Order struct {
 	DeliveryDestination string
 	Items               string
 	Quantity            int
-	Price               string
-	TotalPrice          string
+	Price               float64
+	TotalPrice          float64
 	Status              OrderStatus
 }
