@@ -7,7 +7,7 @@ on:
       - master
 
 jobs:
-  Unit testing:
+  Testing:
     permissions:
       contents: write
       issues: write
