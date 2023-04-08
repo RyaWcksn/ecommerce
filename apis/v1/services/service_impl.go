@@ -186,3 +186,8 @@ func (s *ServiceImpl) GetBuyerOrderList(ctx context.Context) (orderList *[]entit
 
 	return orders, nil
 }
+
+// GetProducts implements IService
+func (s *ServiceImpl) GetProducts(ctx context.Context) (productList *[]entities.ProductListEntity, err error) {
+	panic("unimplemented")
+}

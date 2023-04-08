@@ -198,3 +198,83 @@ func TestProductImpl_GetProductById(t *testing.T) {
 		})
 	}
 }
+
+func TestProductImpl_GetAllProducts(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("Failed to create mock: %v", err)
+	}
+	defer db.Close()
+
+	log := logger.New("", "", "")
+
+	query := regexp.QuoteMeta(GetAllProducts)
+	expectedRow := sqlmock.NewRows([]string{"id", "product_name", "description", "price", "seller"}).
+		AddRow(1, "HG Dynames Gundam", "HG Dynames Gundam from Kidou Senshi Gundam 00", "180000", 1).
+		AddRow(2, "HG Kyrios Gundam", "HG Kyrios Gundam from Kidou Senshi Gundam 00", "180000", 1).
+		AddRow(3, "HG Exia Gundam", "HG Exia Gundam from Kidou Senshi Gundam 00", "180000", 1).
+		AddRow(4, "HG Virtue Gundam", "HG Virtue Gundam from Kidou Senshi Gundam 00", "180000", 1)
+	mock.ExpectQuery(query).WillReturnRows(expectedRow)
+
+	type args struct {
+		ctx context.Context
+		id  int
+	}
+	tests := []struct {
+		name         string
+		args         args
+		wantProducts *[]entities.ProductListEntity
+		wantErr      bool
+	}{
+		{
+			name: "Success",
+			args: args{
+				ctx: context.Background(),
+			},
+			wantProducts: &[]entities.ProductListEntity{
+				{
+					Id:          1,
+					ProductName: "HG Dynames Gundam",
+					Description: "HG Dynames Gundam from Kidou Senshi Gundam 00",
+					Price:       "180000",
+					Seller:      1,
+				},
+				{
+					Id:          2,
+					ProductName: "HG Kyrios Gundam",
+					Description: "HG Kyrios Gundam from Kidou Senshi Gundam 00",
+					Price:       "180000",
+					Seller:      1,
+				},
+				{
+					Id:          3,
+					ProductName: "HG Exia Gundam",
+					Description: "HG Exia Gundam from Kidou Senshi Gundam 00",
+					Price:       "180000",
+					Seller:      1,
+				},
+				{
+					Id:          4,
+					ProductName: "HG Virtue Gundam",
+					Description: "HG Virtue Gundam from Kidou Senshi Gundam 00",
+					Price:       "180000",
+					Seller:      1,
+				},
+			},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			p := NewProductImpl(db, log)
+			gotProducts, err := p.GetAllProducts(tt.args.ctx)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("ProductImpl.ListProduct() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotProducts, tt.wantProducts) {
+				t.Errorf("ProductImpl.ListProduct() = %v, want %v", gotProducts, tt.wantProducts)
+			}
+		})
+	}
+}

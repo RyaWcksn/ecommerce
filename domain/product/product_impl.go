@@ -102,3 +102,31 @@ func (p *ProductImpl) GetProductById(ctx context.Context, id int) (product *enti
 
 	return &payload, nil
 }
+
+// GetAllProducts implements repositories.IProduct
+func (p *ProductImpl) GetAllProducts(ctx context.Context) (productList *[]entities.ProductListEntity, err error) {
+	ctxDb, cancel := context.WithTimeout(ctx, 3*time.Second)
+	defer cancel()
+
+	var productsList []entities.ProductListEntity
+
+	rows, err := p.DB.QueryContext(ctxDb, GetAllProducts)
+	if err != nil {
+		p.log.Errorf("[ERR] While query the data := %v", err)
+		return nil, errors.GetError(errors.InternalServer, err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var product entities.ProductListEntity
+
+		if err := rows.Scan(&product.Id, &product.ProductName, &product.Description, &product.Price, &product.Seller); err != nil {
+			p.log.Errorf("[ERR] While query the data := %v", err)
+			return nil, errors.GetError(errors.InternalServer, err)
+		}
+
+		productsList = append(productsList, product)
+
+	}
+	return &productsList, nil
+}
