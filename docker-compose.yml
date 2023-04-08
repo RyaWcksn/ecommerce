@@ -4,19 +4,33 @@ services:
   mysql:
     image: mysql:latest
     restart: always
+    command: --default-authentication-plugin=mysql_native_password
+    container_name: mysql
     environment:
       MYSQL_ROOT_PASSWORD: aya
       MYSQL_DATABASE: ecommerce
       MYSQL_USER: aya
       MYSQL_PASSWORD: p4ssw0rd1
+      MYSQL_ROOT_HOST: '%'
     ports:
       - "3306:3306"
     volumes:
       - ~/mysql_data:/var/lib/mysql
 
+  ecommerce:
+    build:
+      context: .
+      dockerfile: ./dockerfile
+    container_name: ecommerce
+    ports:
+      - "9000:9000"
+    depends_on:
+      - "mysql"
+
   redis:
     image: redis:latest
     restart: always
+    container_name: redis
     ports:
       - "6379:6379"
     volumes:

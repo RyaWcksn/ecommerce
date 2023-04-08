@@ -6,7 +6,7 @@ app:
 server:
   httpaddress: "9000"
 database:
-  host: "127.0.0.1:3306"
+  host: "mysql:3306"
   username: "aya"
   password: "p4ssw0rd1"
   database: "ecommerce"
