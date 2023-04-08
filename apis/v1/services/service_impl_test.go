@@ -613,3 +613,46 @@ func TestServiceImpl_GetBuyerOrderList(t *testing.T) {
 		})
 	}
 }
+
+func TestServiceImpl_GetProducts(t *testing.T) {
+	type fields struct {
+		cfg         configs.Config
+		buyerImpl   repositories.IBuyer
+		sellerImpl  repositories.ISeller
+		orderImpl   repositories.IOrder
+		productImpl repositories.IProduct
+		log         logger.ILogger
+	}
+	type args struct {
+		ctx context.Context
+	}
+	tests := []struct {
+		name            string
+		fields          fields
+		args            args
+		wantProductList *[]entities.ProductListEntity
+		wantErr         bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &ServiceImpl{
+				cfg:         tt.fields.cfg,
+				buyerImpl:   tt.fields.buyerImpl,
+				sellerImpl:  tt.fields.sellerImpl,
+				orderImpl:   tt.fields.orderImpl,
+				productImpl: tt.fields.productImpl,
+				log:         tt.fields.log,
+			}
+			gotProductList, err := s.GetProducts(tt.args.ctx)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("ServiceImpl.GetProducts() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotProductList, tt.wantProductList) {
+				t.Errorf("ServiceImpl.GetProducts() = %v, want %v", gotProductList, tt.wantProductList)
+			}
+		})
+	}
+}
