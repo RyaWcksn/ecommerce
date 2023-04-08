@@ -1,8 +1,10 @@
 name: Pull request checking
 
 on:
+ push:
   pull_request:
-    branches: [ "master" ]
+    branches:
+      - master
 
 jobs:
   Unit testing:
