@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS orders (
   delivery_destination_address VARCHAR(255) NOT NULL,
   items VARCHAR(255) NOT NULL,
   quantity INT NOT NULL,
-  price VARCHAR(255) NOT NULL,
+  price DECIMAL(10, 2) NOT NULL,
   total_price DECIMAL(10, 2) NOT NULL,
   status INT NOT NULL DEFAULT 0,
   FOREIGN KEY (buyer) REFERENCES buyer(id),

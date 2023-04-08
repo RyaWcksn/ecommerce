@@ -20,7 +20,7 @@ func (h *HandlerImpl) GetProductListsHandler(w http.ResponseWriter, r *http.Requ
 		return err
 	}
 	resp := dto.ProductListResponse{
-		Code:         http.StatusCreated,
+		Code:         http.StatusOK,
 		Message:      "ok",
 		ResponseTime: datetime.GetDateString(),
 		Products:     *products,

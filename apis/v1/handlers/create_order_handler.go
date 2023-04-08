@@ -38,7 +38,7 @@ func (h *HandlerImpl) CreateOrderHandler(w http.ResponseWriter, r *http.Request)
 	}
 
 	resp := dto.CreateOrderResponse{
-		Code:         http.StatusOK,
+		Code:         http.StatusCreated,
 		Message:      "ok",
 		ResponseTime: datetime.GetDateString(),
 		Order:        *status,

@@ -84,8 +84,8 @@ func TestOrderImpl_SellerViewOrderList(t *testing.T) {
 					DeliveryDestination: "Destination",
 					Items:               "Items",
 					Quantity:            4,
-					Price:               "180000",
-					TotalPrice:          "180000",
+					Price:               180000.00,
+					TotalPrice:          180000.00,
 					Status: entities.OrderStatus{
 						Message: constants.PendingMessage,
 						Status:  constants.Pending,
@@ -186,8 +186,8 @@ func TestOrderImpl_BuyerViewOrderList(t *testing.T) {
 					DeliveryDestination: "Destination",
 					Items:               "Items",
 					Quantity:            4,
-					Price:               "180000",
-					TotalPrice:          "180000",
+					Price:               180000.00,
+					TotalPrice:          180000.00,
 					Status: entities.OrderStatus{
 						Message: constants.PendingMessage,
 						Status:  constants.Pending,
