@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"time"
 
 	"github.com/RyaWcksn/ecommerce/configs"
 	"github.com/RyaWcksn/ecommerce/pkgs/logger"
@@ -28,10 +29,9 @@ func (db *Connection) DBConnect() *sql.DB {
 		db.L.Errorf("[ERR] Error while connecting... := %v", errConn)
 		return nil
 	}
-	errPing := dbConn.Ping()
-	if errPing != nil {
-		db.L.Errorf("[ERR] Error while pingging... := %v", errPing)
-		return nil
+	for dbConn.Ping() != nil {
+		db.L.Info("Attempting connect to DB...")
+		time.Sleep(5 * time.Second)
 	}
 	dbConn.SetMaxIdleConns(db.MYSQL.Database.MaxIdleConn)
 	dbConn.SetMaxOpenConns(db.MYSQL.Database.MaxOpenConn)
