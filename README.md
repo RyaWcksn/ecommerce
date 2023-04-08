@@ -11,6 +11,7 @@ Ecommerce for seller and buyer
 **Table of Contents**
 
 - [ecommerce](#ecommerce)
+    - [How to install](#how-to-install)
     - [Common Errors](#common-errors)
     - [Endpoints](#endpoints)
     - [Requests and Response](#requests-and-response)
@@ -24,6 +25,24 @@ Ecommerce for seller and buyer
         - [Buyer Get Orders](#buyer-get-orders)
 
 <!-- markdown-toc end -->
+
+## How to install
+
+```bash
+git clone https://github.com/RyaWcksn/ecommerce
+cd ecommerce
+docker-compose --build -d
+
+./migrate.sh
+```
+
+- Buyer account
+> user@mail.com
+> password123
+
+- Seller account
+> seller@mail.com
+> password123
 
 
 ## Common Errors
