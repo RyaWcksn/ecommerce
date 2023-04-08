@@ -104,6 +104,7 @@ func (s Server) Start() {
 	// Buyer
 	http.Handle(constants.CreateOrderEndpoint, middleware.AuthrorizationMiddleware(constants.BUYER, *s.cfg, s.handler.CreateOrderHandler))
 	http.Handle(constants.OrderListEndpoint, middleware.AuthrorizationMiddleware(constants.BUYER, *s.cfg, s.handler.GetBuyerOrdersHandler))
+	http.Handle(constants.ProductListEndpoint, middleware.AuthrorizationMiddleware(constants.BUYER, *s.cfg, s.handler.GetProductsHandler))
 
 	go func() {
 		err := http.ListenAndServe(addr, nil)

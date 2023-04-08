@@ -23,10 +23,13 @@ github.com/RyaWcksn/ecommerce/apis/v1/handlers/get_buyer_order_handler.go:20.2,2
 github.com/RyaWcksn/ecommerce/apis/v1/handlers/get_product_list_handler.go:12.92,18.16 5 1
 github.com/RyaWcksn/ecommerce/apis/v1/handlers/get_product_list_handler.go:18.16,21.3 2 0
 github.com/RyaWcksn/ecommerce/apis/v1/handlers/get_product_list_handler.go:22.2,29.30 2 1
+github.com/RyaWcksn/ecommerce/apis/v1/handlers/get_products_handler.go:11.88,15.16 3 0
+github.com/RyaWcksn/ecommerce/apis/v1/handlers/get_products_handler.go:15.16,18.3 2 0
+github.com/RyaWcksn/ecommerce/apis/v1/handlers/get_products_handler.go:19.2,26.30 2 0
 github.com/RyaWcksn/ecommerce/apis/v1/handlers/get_seller_orders_handler.go:11.92,15.16 3 1
 github.com/RyaWcksn/ecommerce/apis/v1/handlers/get_seller_orders_handler.go:15.16,18.3 2 0
 github.com/RyaWcksn/ecommerce/apis/v1/handlers/get_seller_orders_handler.go:20.2,27.30 2 1
-github.com/RyaWcksn/ecommerce/apis/v1/handlers/handler.go:29.73,34.2 1 1
+github.com/RyaWcksn/ecommerce/apis/v1/handlers/handler.go:30.73,35.2 1 1
 github.com/RyaWcksn/ecommerce/apis/v1/handlers/login_handler.go:16.82,21.16 4 1
 github.com/RyaWcksn/ecommerce/apis/v1/handlers/login_handler.go:21.16,24.3 2 0
 github.com/RyaWcksn/ecommerce/apis/v1/handlers/login_handler.go:25.2,25.54 1 1
