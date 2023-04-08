@@ -90,7 +90,9 @@ github.com/RyaWcksn/ecommerce/apis/v1/services/service_impl.go:173.2,173.19 1 1
 github.com/RyaWcksn/ecommerce/apis/v1/services/service_impl.go:177.103,182.16 4 1
 github.com/RyaWcksn/ecommerce/apis/v1/services/service_impl.go:182.16,185.3 2 0
 github.com/RyaWcksn/ecommerce/apis/v1/services/service_impl.go:187.2,187.20 1 1
-github.com/RyaWcksn/ecommerce/apis/v1/services/service_impl.go:191.111,192.24 1 0
+github.com/RyaWcksn/ecommerce/apis/v1/services/service_impl.go:191.111,193.16 2 1
+github.com/RyaWcksn/ecommerce/apis/v1/services/service_impl.go:193.16,196.3 2 0
+github.com/RyaWcksn/ecommerce/apis/v1/services/service_impl.go:198.2,198.22 1 1
 github.com/RyaWcksn/ecommerce/apis/v1/services/service_mock.go:28.61,32.2 3 0
 github.com/RyaWcksn/ecommerce/apis/v1/services/service_mock.go:35.59,37.2 1 0
 github.com/RyaWcksn/ecommerce/apis/v1/services/service_mock.go:40.121,46.2 5 0
