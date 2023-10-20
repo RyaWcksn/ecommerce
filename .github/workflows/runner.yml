@@ -56,6 +56,18 @@ jobs:
         token: ${{secrets.CODECOV_TOKEN}}
         file: ./cov.txt  
         fail_ci_if_error: false
+
+    - name: Run tests and calculate coverage
+      run: |
+        go test ./... -coverprofile=coverage.out
+        go tool cover -func=coverage.out > coverage.txt
+      shell: bash
+
+    - name: Check coverage
+      run: ./check_coverage.sh
+      shell: bash
+
+
       
     - name: Release
       run: npx semantic-release
