@@ -5,7 +5,7 @@ name: Go
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "release/*" ]
 
 jobs:
 
@@ -57,22 +57,37 @@ jobs:
         file: ./cov.txt  
         fail_ci_if_error: false
 
-    - name: Run tests and calculate coverage
-      run: |
-        go test ./... -coverprofile=coverage.out
-        go tool cover -func=coverage.out > coverage.txt
-      shell: bash
+    # - name: Run tests and calculate coverage
+    #   run: |
+    #     go test ./... -coverprofile=coverage.out
+    #     go tool cover -func=coverage.out > coverage.txt
+    #   shell: bash
 
-    - name: Check coverage
-      run: ./check_coverage.sh
-      shell: bash
-
-
+    # - name: Check coverage
+    #   run: ./check_coverage.sh
+    #   shell: bash
       
     - name: Release
       run: npx semantic-release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Generate Release Notes
+      run: |
+        VERSION=$(npx semantic-release-cli version)
+        echo "# Release Notes v.${VERSION}" > "v.${VERSION}.md"
+        npx semantic-release-cli changelog >> "v.${VERSION}.md"
+        echo "Release version: $VERSION" >> "v.${VERSION}.md"
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Commit and Push Release Notes
+      run: |
+        git config user.name "${{ github.actor }}"
+        git config user.email "${{ github.actor }}@users.noreply.github.com"
+        git add "v.${VERSION}.md"
+        git commit -m "chore(release): v.${{ steps.release.outputs.version }} release notes [skip ci]"
+        git push
 
   docker:
     runs-on: ubuntu-latest

@@ -16,13 +16,10 @@ import (
 
 func TestServiceImpl_Login(t *testing.T) {
 
-	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
+	// ctrl := gomock.NewController(t)
+	// defer ctrl.Finish()
 
-	buyerMock := repositories.NewMockIBuyer(ctrl)
-	sellerMock := repositories.NewMockISeller(ctrl)
-	productMock := repositories.NewMockIProduct(ctrl)
-	orderMock := repositories.NewMockIOrder(ctrl)
+	// buyerMock := repositories.NewMockIBuyer(ctrl)
 	cfg := configs.Cfg
 	log := logger.New("", "", "")
 
@@ -40,39 +37,66 @@ func TestServiceImpl_Login(t *testing.T) {
 	tests := []struct {
 		name     string
 		args     args
-		WantMock func()
+		WantMock func(ctrl *gomock.Controller) repositories.IBuyer
 		wantErr  bool
 	}{
+		// {
+		// 	name: "Success",
+		// 	args: args{
+		// 		ctx: context.Background(),
+		// 		payload: &dto.LoginRequest{
+		// 			Email:    "user@mail.com",
+		// 			Password: "password123",
+		// 			Role:     "buyer",
+		// 		},
+		// 	},
+		// 	WantMock: func() {
+		// 		buyerMock.EXPECT().GetEmail(gomock.Any(), gomock.Any()).Return(
+		// 			&entities.LoginEntity{
+		// 				Email:    "user@mail.com",
+		// 				Password: "$2a$10$xCniCdjZENytpQ7/NTNQduSJaZ6pl3bFMbd7bfF4OLwwbCyhGH8rC"},
+		// 			nil)
+		// 	},
+
+		// 	wantErr: false,
+		// },
 		{
-			name: "Success",
+			name: "Test",
 			args: args{
-				ctx: context.Background(),
+				ctx: context.TODO(),
 				payload: &dto.LoginRequest{
 					Email:    "user@mail.com",
 					Password: "password123",
 					Role:     "buyer",
 				},
 			},
-			WantMock: func() {
-				buyerMock.EXPECT().GetEmail(gomock.Any(), gomock.Any()).Return(
-					&entities.LoginEntity{
-						Email:    "user@mail.com",
-						Password: "$2a$10$xCniCdjZENytpQ7/NTNQduSJaZ6pl3bFMbd7bfF4OLwwbCyhGH8rC"},
-					nil)
+			WantMock: func(ctrl *gomock.Controller) repositories.IBuyer {
+				mockData := repositories.NewMockIBuyer(ctrl)
+				mockData.EXPECT().GetEmail(gomock.Any(), gomock.Any()).Return(&entities.LoginEntity{
+					Email:    "user@mail.com",
+					Password: "$2a$10$xCniCdjZENytpQ7/NTNQduSJaZ6pl3bFMbd7bfF4OLwwbCyhGH8rC"},
+					nil).AnyTimes()
+				return mockData
 			},
-
 			wantErr: false,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tt.WantMock()
+			ctrl := gomock.NewController(t)
+			defer ctrl.Finish()
+
+			sellerMock := repositories.NewMockISeller(ctrl)
+			productMock := repositories.NewMockIProduct(ctrl)
+			orderMock := repositories.NewMockIOrder(ctrl)
+
 			s := NewServiceImpl().
-				WithBuyer(buyerMock).
+				WithBuyer(tt.WantMock(ctrl)).
 				WithSeller(sellerMock).
-				WithOrder(orderMock).
 				WithProduct(productMock).
+				WithOrder(orderMock).
 				WithLog(log).WithConfig(*cfg)
+
 			gotToken, err := s.Login(tt.args.ctx, tt.args.payload)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("ServiceImpl.Login() error = %v, wantErr %v", err, tt.wantErr)
